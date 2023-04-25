@@ -1,5 +1,9 @@
 // TODO: Put a real interfaces here
 
 export interface ITodo {
-  data: string;
+  id?: string
+  name: string
+  description: string
+  isPrivate: boolean
+  isCompleted?: boolean
 }
