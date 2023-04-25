@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
+import Joi from 'joi'
 
 import AppRouter from './routes';
 import connectDB from './config/database';
@@ -18,6 +19,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 router.init();
 
 const port = app.get('port');
+
+
+// error handler
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(err);
+  if (err instanceof Joi.ValidationError) {
+    res.status(400).send(err.message)
+  }
+
+  res.status(500).send(err.message || 'Internal error')
+})
+
 // eslint-disable-next-line no-console
 const server = app.listen(port, () => console.log(`Server started on port ${port}`));
 

@@ -2,6 +2,7 @@ import { ITodo } from './../types/todos.type';
 import e, { Response, Request, NextFunction } from 'express';
 import TodoService from '../services/todo.service';
 import TryCatch from '../utils/try-catch.decorator';
+import Joi from 'joi';
 
 
 @TryCatch
@@ -10,7 +11,7 @@ export class TodoController {
 
   async getAllTodo(_: Request, res: Response) {
     const todos = await this.todoService.findAll();
-    throw new Error()
+    res.send(todos)
   }
 
   async createTodo(req: Request, res: Response) {
@@ -40,10 +41,13 @@ export class TodoController {
     res.send('Todo completed')
   }
 
-  isBodyValidTodo(req: Request, res: Response, next: NextFunction) {
-    if (isTodo(req.body)) return next()
-    
-    return res.status(400).send('Invalid todo')
+  async isBodyValidTodo(req: Request, res: Response, next: NextFunction) {
+      await Joi.object({
+        name: Joi.string().trim().required(),
+        description: Joi.string().trim().required(),
+        completed: Joi.boolean(),
+        isPrivate: Joi.boolean()
+      }).validateAsync(req.body)
   }
 
   async isTodoExists(req: Request, res: Response, next: NextFunction) {
@@ -56,26 +60,26 @@ export class TodoController {
 const todoController = new TodoController(new TodoService());
 export default todoController;
 
-function isTodo(obj: any): obj is ITodo {
-  const hasUnexpectedProps = (() => {
-    const expectedProps = ['name', 'description', 'isPrivate', 'isCompleted', 'id', ]
-    for (let i in obj) {
-      if (!expectedProps.includes(i)) return false
-    }
-    return true
-  })()
+// function isTodo(obj: any): obj is ITodo {
+//   const hasUnexpectedProps = (() => {
+//     const expectedProps = ['name', 'description', 'isPrivate', 'isCompleted', 'id', ]
+//     for (let i in obj) {
+//       if (!expectedProps.includes(i)) return false
+//     }
+//     return true
+//   })()
 
-  if (
-      typeof obj.name === 'string' 
-      && typeof obj.description === 'string' 
-      && typeof obj.isPrivate === 'boolean'
-      && (typeof obj.isCompleted === 'boolean' || !obj.isCompleted)
-      && (typeof obj.id === 'string' || !obj.id)
-      && !hasUnexpectedProps
-      ) return true
+//   if (
+//       typeof obj.name === 'string' 
+//       && typeof obj.description === 'string' 
+//       && typeof obj.isPrivate === 'boolean'
+//       && (typeof obj.isCompleted === 'boolean' || !obj.isCompleted)
+//       && (typeof obj.id === 'string' || !obj.id)
+//       && !hasUnexpectedProps
+//       ) return true
       
-  return false
-}
+//   return false
+// }
 
 
 
