@@ -40,21 +40,6 @@ export class TodoController {
     await this.todoService.complete(req.params.id)
     res.send('Todo completed')
   }
-
-  async isBodyValidTodo(req: Request, res: Response, next: NextFunction) {
-      await Joi.object({
-        name: Joi.string().trim().required(),
-        description: Joi.string().trim().required(),
-        completed: Joi.boolean(),
-        isPrivate: Joi.boolean()
-      }).validateAsync(req.body)
-  }
-
-  async isTodoExists(req: Request, res: Response, next: NextFunction) {
-    if (await this.todoService.findById(req.params.id)) return next()
-
-    return res.status(404).send('Todo not found')
-  }
 }
 
 const todoController = new TodoController(new TodoService());
