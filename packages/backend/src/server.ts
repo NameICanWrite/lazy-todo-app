@@ -27,8 +27,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof Joi.ValidationError) {
     res.status(400).send(err.message)
   }
-
-  res.status(500).send(err.message || 'Internal error')
+  if (!res.statusCode) res.status(500)
+  res.send(err.message || 'Internal error')
 })
 
 // eslint-disable-next-line no-console

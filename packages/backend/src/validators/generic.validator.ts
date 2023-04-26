@@ -20,7 +20,9 @@ export class GenericValidator {
   async isTodoExists(req: Request, res: Response, next: NextFunction) {
     if (await this.todoService.findById(req.params.id)) return next()
 
-    return res.status(404).send('Todo not found')
+    res.status(404)
+    
+    return 'Todo not found'
   }
 }
 

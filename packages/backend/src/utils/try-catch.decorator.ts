@@ -8,7 +8,8 @@ export default function TryCatch(target: any) {
 
     target.prototype[methodName] = async function (req: Request, res: Response, next: NextFunction) {
       try {
-        return await originalMethod.call(this, req, res, next);
+        const responseBody = await originalMethod.call(this, req, res, next);
+        if (responseBody) return res.send(responseBody)
       } catch (error) {
         console.log(`Error in ${methodName}!`);
         next(error);
