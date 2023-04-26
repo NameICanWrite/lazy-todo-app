@@ -11,9 +11,10 @@ export class GenericValidator {
       await Joi.object({
         name: Joi.string().trim().required(),
         description: Joi.string().trim().required(),
-        completed: Joi.boolean(),
+        isCompleted: Joi.boolean(),
         isPrivate: Joi.boolean()
       }).validateAsync(req.body)
+      next()
   }
 
   async isTodoExists(req: Request, res: Response, next: NextFunction) {
