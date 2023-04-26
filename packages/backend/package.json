@@ -14,10 +14,12 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@types/cors": "^2.8.13",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "config": "^3.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",

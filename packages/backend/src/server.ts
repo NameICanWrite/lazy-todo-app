@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import Joi from 'joi'
+import cors from 'cors';
 
 import AppRouter from './routes';
 import connectDB from './config/database';
@@ -12,6 +13,11 @@ const router = new AppRouter(app);
 connectDB();
 
 // Express configuration
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST", "OPTIONS", "PATCH", "PUT", 'DELETE'],
+  credentials: true
+}))
 app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
