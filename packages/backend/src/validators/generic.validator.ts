@@ -7,22 +7,38 @@ import Joi from "joi";
 export class GenericValidator {
   constructor(private todoService: TodoService) {}
 
-  async isBodyValidTodo(req: Request, res: Response, next: NextFunction) {
-      await Joi.object({
+  entitiesMap = {
+    todo: {
+      service: this.todoService,
+      joiSchema: Joi.object({
         name: Joi.string().trim().required(),
         description: Joi.string().trim().required(),
         isCompleted: Joi.boolean(),
         isPrivate: Joi.boolean()
-      }).validateAsync(req.body)
-      next()
+      })
+    }
   }
 
-  async isTodoExists(req: Request, res: Response, next: NextFunction) {
-    if (await this.todoService.findById(req.params.id)) return next()
+  
+  isBodyValidEntity(entityType: 'todo') {
+    const joiSchema = this.entitiesMap[entityType].joiSchema;
 
-    res.status(404)
-    
-    return 'Todo not found'
+    return TryCatch(
+    async function(req: Request, res: Response, next: NextFunction) {
+      await joiSchema.validateAsync(req.body)
+      next()
+    })
+  }
+
+  isEntityExistsById(entityType: 'todo') {
+    const service = this.entitiesMap[entityType].service
+
+    return TryCatch(async function(req: Request, res: Response, next: NextFunction) {
+      if (await service.findById(req.params.id)) return next()
+      res.status(404)
+      
+      return 'Todo not found'
+    })
   }
 }
 

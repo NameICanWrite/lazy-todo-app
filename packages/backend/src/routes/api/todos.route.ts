@@ -7,24 +7,24 @@ const todosRouter: Router = Router();
 
 todosRouter.get('/', todoController.getAllTodo.bind(todoController));
 todosRouter.post('/', 
-  validator.isBodyValidTodo,
+  validator.isBodyValidEntity.bind(validator)('todo'),
   todoController.createTodo.bind(todoController)
 )
 todosRouter.get('/complete/:id', 
-  validator.isTodoExists.bind(validator),
+  validator.isEntityExistsById.bind(validator)('todo'),
   todoController.completeTodo.bind(todoController)
 )
 todosRouter.put('/:id', 
-  validator.isBodyValidTodo,
-  validator.isTodoExists.bind(validator),
+  validator.isBodyValidEntity.bind(validator)('todo'),
+  validator.isEntityExistsById.bind(validator)('todo'),
   todoController.editTodo.bind(todoController)
 )
 todosRouter.get('/one/:id', 
-  validator.isTodoExists.bind(validator),
+  validator.isEntityExistsById.bind(validator)('todo'),
   todoController.getOneTodo.bind(todoController)
 )
 todosRouter.delete('/:id',
-  validator.isTodoExists.bind(validator), 
+  validator.isEntityExistsById.bind(validator)('todo'), 
   todoController.deleteTodo.bind(todoController)
 )
 
