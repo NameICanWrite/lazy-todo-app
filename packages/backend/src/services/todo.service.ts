@@ -1,5 +1,6 @@
+import { ITodo } from '../types/todos.type';
 import { Todo } from './../entities/Todo';
-
+import { DeepPartial } from 'typeorm';
 
 export default class TodoService {
   async findAll() {
@@ -7,11 +8,11 @@ export default class TodoService {
     return todos;
   }
 
-  async create(todo: Todo) {
-    await Todo.save(todo)
+  async create(todo: ITodo) {
+    const toBeSaved = await Todo.save(todo as DeepPartial<Todo>)
   }
 
-  async edit(id: string, newTodo: Todo) {
+  async edit(id: string, newTodo: ITodo) {
     const todo = await Todo.update(id, newTodo)
     return todo
   }
