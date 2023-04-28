@@ -32,7 +32,8 @@ export const ROUTER_KEYS = {
   SIGNUP:'/signup',
   MY_TODOS: '/my-todos',
   CREATE_TODO: '/create-todo',
-  EDIT_TODO: '/edit-todo'
+  EDIT_TODO: '/edit-todo',
+  VIEW_TODO: '/view-todo'
 };
 
 export const SERVER_URL = 'http://localhost:5000'
