@@ -2,14 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import TryCatch from "../utils/try-catch.decorator";
 import TodoService from "../services/todo.service";
 import Joi from "joi";
+import { getMetadataArgsStorage } from "typeorm";
+import { ITodo } from "../types/todos.type";
 
 @TryCatch
 export class GenericValidator {
-  constructor(private todoService: TodoService) {}
+  constructor() {}
 
   entitiesMap = {
-    todo: {
-      service: this.todoService,
+    todos: {
       joiSchema: Joi.object({
         name: Joi.string().trim().required(),
         description: Joi.string().trim().required(),
@@ -20,9 +21,15 @@ export class GenericValidator {
   }
 
   
-  isBodyValidEntity(entityType: 'todo') {
-    const joiSchema = this.entitiesMap[entityType].joiSchema;
-
+  isBodyValidEntity(entity: any) {
+    const entityType = findTableFromEntity(entity)
+    console.log(entityType);
+    let joiSchema: Joi.ObjectSchema<ITodo>
+    if (this.entitiesMap.hasOwnProperty(entityType)) {
+      const entityProp = entityType as keyof typeof this.entitiesMap
+      joiSchema = this.entitiesMap[entityProp].joiSchema;
+    }
+    
     return TryCatch(
     async function(req: Request, res: Response, next: NextFunction) {
       await joiSchema.validateAsync(req.body)
@@ -30,11 +37,10 @@ export class GenericValidator {
     })
   }
 
-  isEntityExistsById(entityType: 'todo') {
-    const service = this.entitiesMap[entityType].service
+  isEntityExistsById(Entity: any) {
 
     return TryCatch(async function(req: Request, res: Response, next: NextFunction) {
-      if (await service.findById(req.params.id)) return next()
+      if (await Entity.findOneBy({id: req.params.id})) return next()
       res.status(404)
       
       return 'Todo not found'
@@ -42,5 +48,10 @@ export class GenericValidator {
   }
 }
 
-const validator = new GenericValidator(new TodoService());
+const validator = new GenericValidator();
 export default validator;
+
+function findTableFromEntity(entity: any): string {
+  const table = getMetadataArgsStorage().tables.find(t => t.target === entity);
+  return table?.name || ''
+}

@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, getMetadataArgsStorage } from 'typeorm';
 
 @Entity('todos')
 export class Todo extends BaseEntity {
@@ -17,3 +17,7 @@ export class Todo extends BaseEntity {
   @Column()
   isCompleted: boolean
 }
+
+
+
+
