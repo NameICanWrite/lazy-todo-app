@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, getMetadataArgsStorage } from 'typeorm';
+import { User } from './User';
 
 @Entity('todos')
 export class Todo extends BaseEntity {
@@ -16,4 +17,11 @@ export class Todo extends BaseEntity {
 
   @Column()
   isCompleted: boolean
+
+  @ManyToOne(() => User, (user: User) => user.todos)
+  user: User
 }
+
+
+
+
