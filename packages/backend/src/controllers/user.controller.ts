@@ -61,7 +61,7 @@ export class UserController {
     const hashedNewPassword = await bcrypt.hash(newPassword, 10)
     await this.userService.changePassword((req.user as User).id, hashedNewPassword)
     return 'Password changed successfully'
-  }git add .; git commit -m "feat: Auth with passport and bearer jwt plus private todos plus change password endpoint"
+  }
 
 }
 
