@@ -1,7 +1,10 @@
+
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Todo } from './Todo';
 
-@Entity()
+import { entityTypes } from '../consts';
+
+@Entity(entityTypes.USER)
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
@@ -13,5 +16,5 @@ export class User extends BaseEntity {
   password: string;
 
   @OneToMany(() => Todo, (todo: Todo) => todo.user)
-  todos: Array<Todo>
+  todos: Array<Todo>;
 }

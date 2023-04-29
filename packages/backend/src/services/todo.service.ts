@@ -1,6 +1,10 @@
+import { IUser } from '../types/user.type';
 import { ITodo } from '../types/todos.type';
 import { Todo } from './../entities/Todo';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, In, Not } from 'typeorm';
+import { User } from '../entities/User';
+
+import { entityTypes } from '../consts';
 
 export default class TodoService {
   async findAll() {
@@ -8,7 +12,18 @@ export default class TodoService {
     return todos;
   }
 
-  async create(todo: ITodo) {
+  async findAllPublic({excludeIds}: {excludeIds: string[]}) {
+    const todos = await Todo.find({where: {
+        isPrivate: false, 
+        id: Not(In(excludeIds))
+      },
+      relations: ['user']
+    })
+    return todos;
+  }
+
+  async create(todo: ITodo, user: User) {
+    todo.user = user
     const toBeSaved = await Todo.save(todo as DeepPartial<Todo>)
   }
 

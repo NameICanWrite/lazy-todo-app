@@ -3,14 +3,16 @@ import express, { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import Joi from 'joi'
 import cors from 'cors';
-
+import dotenv from 'dotenv'
 import AppRouter from './routes';
 import connectDB from './config/database';
+dotenv.config()
 
 const app = express();
 const router = new AppRouter(app);
 // Connect to MongoDB
 connectDB();
+
 
 // Express configuration
 app.use(cors({

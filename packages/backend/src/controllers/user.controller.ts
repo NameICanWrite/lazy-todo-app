@@ -1,70 +1,68 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import {User} from '../entities/User';
+import UserService from '../services/user.service';
+import bcrypt from 'bcrypt'
+import TryCatch from '../utils/try-catch.decorator';
+import { AddAuthToken } from '../middlewares/auth.middleware';
 
-interface UserPayload {
-  id: string;
-  email: string;
-  iat: number;
-  exp: number;
-}
 
-class AuthController {
-  public static async signup(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body;
-    try {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.status(400).json({ message: 'Email already exists' });
-      }
-      const newUser = new User({ email });
-      const hashedPassword = await bcrypt.hash(password, 10);
-      newUser.password = hashedPassword;
-      await newUser.save();
-      const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET);
-      return res.status(201).header('Authorization', `Bearer ${token}`).json({ token });
-    } catch (error) {
-      return next(error);
+export class UserController {
+  constructor(private userService: UserService) {}
+
+  // @AddAuthToken
+  async signup(req: Request, res: Response, next: NextFunction) {
+    const { name, password } = req.body;
+    const existingUser = await this.userService.findByName(name);
+    if (existingUser) {
+      res.status(400)
+      return {message: 'Username already exists'}
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await this.userService.create({name, password: hashedPassword})
+    
+    return {message: 'Signed up successfully!', tokenPayload: {uid: newUser.id}}
   }
 
-  public static async login(req: Request, res: Response, next: NextFunction) {
-    passport.authenticate('local', { session: false }, (err, user, info) => {
-      if (err || !user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-      req.login(user, { session: false }, (err) => {
-        if (err) {
-          return next(err);
-        }
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
-        return res.status(200).header('Authorization', `Bearer ${token}`).json({ token });
-      });
-    })(req, res, next);
+  // @AddAuthToken
+  async login(req: Request<any, any, {name: string, password: string}>, res: Response, next: NextFunction) {
+    const { name, password } = req.body;
+    const user = await this.userService.findByName(name);
+    if (!user) {
+      res.status(401)
+      return {message: 'Username invalid'}
+    }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password)
+    if (!isPasswordCorrect) {
+      res.status(401)
+      return {message: 'Password incorrect'}
+    }
+    return {message: 'Logged in successfully', tokenPayload: {uid: user.id}}
   }
 
-  public static initialize() {
-    const opts = {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET
-    };
-    passport.use(
-      new JwtStrategy(opts, async (jwt_payload: UserPayload, done: any) => {
-        try {
-          const user = await User.findById(jwt_payload.id);
-          if (user) {
-            return done(null, user);
-          } else {
-            return done(null, false);
-          }
-        } catch (error) {
-          return done(error, false);
-        }
-      })
-    );
+  async getCurrentUser(req: Request, res: Response) {
+    console.log(req.user);
+    return req.user
   }
+
+  async changePasswordSecure(req: Request<any, any, {oldPassword:string, newPassword: string}>, res: Response) {
+    const {oldPassword, newPassword} = req.body
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, (req.user as User)?.password)
+    if (!isPasswordCorrect) return 'Old password incorrect'
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10)
+    await this.userService.changePassword((req.user as User).id, hashedNewPassword)
+    return 'Password changed successfully'
+  }
+
+  async changePassword(req: Request<any, any, {newPassword: string}>, res: Response) {
+    const {newPassword} = req.body
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10)
+    await this.userService.changePassword((req.user as User).id, hashedNewPassword)
+    return 'Password changed successfully'
+  }git add .; git commit -m "feat: Auth with passport and bearer jwt plus private todos plus change password endpoint"
+
 }
 
-export default AuthController;
+export const userController = new UserController(new UserService())

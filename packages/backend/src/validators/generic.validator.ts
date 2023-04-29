@@ -5,12 +5,14 @@ import Joi from "joi";
 import { getMetadataArgsStorage } from "typeorm";
 import { ITodo } from "../types/todos.type";
 
+import { entityTypes } from '../consts';
+
 @TryCatch
 export class GenericValidator {
   constructor() {}
 
   entitiesMap = {
-    todos: {
+    [entityTypes.TODOS]: {
       joiSchema: Joi.object({
         name: Joi.string().trim().required(),
         description: Joi.string().trim().required(),
@@ -21,9 +23,8 @@ export class GenericValidator {
   }
 
   
-  isBodyValidEntity(entity: any) {
-    const entityType = findTableFromEntity(entity)
-    console.log(entityType);
+  isBodyValidEntity(Entity: any) {
+    const entityType = findTableFromEntity(Entity)
     let joiSchema: Joi.ObjectSchema<ITodo>
     if (this.entitiesMap.hasOwnProperty(entityType)) {
       const entityProp = entityType as keyof typeof this.entitiesMap
@@ -38,12 +39,13 @@ export class GenericValidator {
   }
 
   isEntityExistsById(Entity: any) {
-
+    const entityType = findTableFromEntity(Entity)
     return TryCatch(async function(req: Request, res: Response, next: NextFunction) {
-      if (await Entity.findOneBy({id: req.params.id})) return next()
-      res.status(404)
-      
-      return 'Todo not found'
+      if (await Entity.findOneBy({id: req.params.id})) {
+        return next()
+      }
+      res.status(404) 
+      return entityType + ' not found'
     })
   }
 }
