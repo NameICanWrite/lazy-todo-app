@@ -11,7 +11,7 @@ import { User } from '../entities/User';
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  async getAllVisibleTodos(req: Request, res: Response) {
+  async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
     const currentUserTodos = (req.user as User)?.todos
     const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) || []
     let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
@@ -19,12 +19,12 @@ export class TodoController {
     return todos
   }
 
-  async createTodo(req: Request<{id: string}, any, ITodo>, res: Response) {
+  async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response) {
     await this.todoService.create(req.body, req.user as User)
     return 'Todo created'
   }
 
-  async getOneTodo(req: Request<{id: string}>, res: Response) {
+  async getOneTodo(req: Request<{id: string}> & {user: User}, res: Response) {
     const todo = await this.todoService.findById(req.params.id)
     const isOwner = (req.user as User)?.todos.some(todo => todo.id == req.params.id)
     if (todo?.isPrivate && !isOwner) {

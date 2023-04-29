@@ -1,6 +1,5 @@
 import { IUser } from '../types/user.type';
 import { User } from './../entities/User';
-import { DeepPartial } from 'typeorm';
 
 import { entityTypes } from '../consts';
 

@@ -8,6 +8,7 @@ import TryCatch from '../utils/try-catch.decorator';
 import { AddAuthToken } from '../middlewares/auth.middleware';
 
 
+console.log(bcrypt)
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -41,15 +42,15 @@ export class UserController {
     return {message: 'Logged in successfully', tokenPayload: {uid: user.id}}
   }
 
-  async getCurrentUser(req: Request, res: Response) {
+  async getCurrentUser(req: Request & {user: User}, res: Response) {
     return req.user
   }
 
-  async getCurrentUserTodos(req: Request, res: Response) {
+  async getCurrentUserTodos(req: Request & {user: User}, res: Response) {
     return (req.user as User)?.todos || []
   }
 
-  async changePasswordSecure(req: Request<any, any, {oldPassword:string, newPassword: string}>, res: Response) {
+  async changePasswordSecure(req: Request<any, any, {oldPassword:string, newPassword: string}> & {user: User}, res: Response) {
     const {oldPassword, newPassword} = req.body
     const isPasswordCorrect = await bcrypt.compare(oldPassword, (req.user as User)?.password)
     if (!isPasswordCorrect) return 'Old password incorrect'
@@ -59,7 +60,7 @@ export class UserController {
     return 'Password changed successfully'
   }
 
-  async changePassword(req: Request<any, any, {newPassword: string}>, res: Response) {
+  async changePassword(req: Request<any, any, {newPassword: string}> & {user: User}, res: Response) {
     const {newPassword} = req.body
     const hashedNewPassword = await bcrypt.hash(newPassword, 10)
     await this.userService.changePassword((req.user as User).id, hashedNewPassword)
