@@ -43,11 +43,13 @@ export const authAndGetUser = TryCatch(async (req: Request, res: Response, next:
     if (err || !user) {
       res.status(401)
       errMessage = 'You should login first!'
-      return next(err)
+      console.log('errored');
+      return resolve()
     }
     req.user = user
-    return resolve(1)
+    return resolve()
   })(req, res, next))
+
   return errMessage || next()
 })
 

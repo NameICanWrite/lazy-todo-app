@@ -11,6 +11,7 @@ const router: Router = Router();
 router.post('/signup', AddAuthToken(userController.signup.bind(userController)));
 router.post('/login', AddAuthToken(userController.login.bind(userController)))
 router.get('/current', authAndGetUser, TryCatch(userController.getCurrentUser))
+router.get('/current/todos', authAndGetUser, TryCatch(userController.getCurrentUserTodos))
 router.post('/change-password-secure', authAndGetUser, TryCatch(userController.changePasswordSecure.bind(userController)))
 router.post('/change-password', authAndGetUser, TryCatch(userController.changePassword.bind(userController)))
 export default router;

@@ -42,8 +42,11 @@ export class UserController {
   }
 
   async getCurrentUser(req: Request, res: Response) {
-    console.log(req.user);
     return req.user
+  }
+
+  async getCurrentUserTodos(req: Request, res: Response) {
+    return (req.user as User)?.todos || []
   }
 
   async changePasswordSecure(req: Request<any, any, {oldPassword:string, newPassword: string}>, res: Response) {
