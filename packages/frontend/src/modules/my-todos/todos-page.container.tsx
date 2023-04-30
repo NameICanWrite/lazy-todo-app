@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useLayoutEffect, useRef, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import Todo from './todo/todo';
 import { ITodo } from '../common/types/todos.type';
@@ -10,6 +10,9 @@ import styled from 'styled-components';
 import SwitchButton from './switch-button/switch-button';
 import Pagination from '../pagination/pagination';
 import Slider from '../slider/slider'
+import { useRadioGroup } from '@mui/material';
+import TodosPageComponent from './todos.page.component';
+
 
 const MyTodosContainer = () => {
   const history = useHistory()
@@ -27,9 +30,32 @@ const MyTodosContainer = () => {
     })
   }
 
-  useEffect(() => {
-    refetch()
+  const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop')
+  const deviceRef = useRef(device)
+
+  const onResize = useCallback(() => {
+    const width = window.innerWidth
+    if (width >= 768 && deviceRef.current !== 'desktop') {
+      deviceRef.current = 'desktop'
+      setDevice(deviceRef.current)
+    } else if (width < 768 && width >= 425 && deviceRef.current !== 'tablet') {
+      deviceRef.current = 'tablet'
+      setDevice(deviceRef.current)
+    } else if (width < 425 && deviceRef.current !== 'mobile') {
+      deviceRef.current = 'mobile'
+      setDevice(deviceRef.current)
+    }
   }, [])
+
+  useLayoutEffect(() => {
+    refetch()
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
 
   // test todos
   // const todos: ITodo[] = useMemo(() => {
@@ -48,51 +74,22 @@ const MyTodosContainer = () => {
 
   console.log('todos', todos)
 
-  // const [on, setOn] = useState(false)
-
-  // const onSwitch = () => {
-  //   setOn(!on)
-  //
   const [currentPage, setCurrentPage] = useState(1)
 
-  const pagesNumber = !todos ? 0 : Math.floor(todos.length / 10)
+  const pagesNumber = !todos ? 0 : Math.ceil(todos.length / 10)
 
   console.log('currentPage', currentPage)
-
+  
   return (
-    <Container>
-      <Button onClick={() => history.push(APP_KEYS.ROUTER_KEYS.CREATE_TODO)}>
-        Create todo
-      </Button>
-      <TodosTable>
-        {todos && 
-        Array.from({length: 10}, (_, i) => (currentPage - 1) * 10 + i)
-        .filter(i => i < todos.length)
-        .map(i => todos[i])
-        .map((todo, index) => (
-          <Todo
-            index={index}
-            key={todo.id}
-            todo={todo}
-            onDelete={onDeleteTodo(todo.id)}
-            onComplete={onCompleteTodo(todo.id)}
-          />
-        ))}
-      </TodosTable>
-      {todos && <Slider perSlide={1}>
-        {todos.map((todo, index) => (
-          <Todo
-            index={index}
-            key={todo.id}
-            todo={todo}
-            onDelete={onDeleteTodo(todo.id)}
-            onComplete={onCompleteTodo(todo.id)}
-          />
-        ))}
-      </Slider>}
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pagesNumber={pagesNumber} />
-      {/* <SwitchButton on={on} onSwitch={onSwitch}/> */}
-    </Container>
+    <TodosPageComponent
+      device={device}
+      todos={todos as ITodo[]}
+      onCompleteTodo={onCompleteTodo}
+      onDeleteTodo={onDeleteTodo}
+      pagesNumber={pagesNumber}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
   )
 }
 

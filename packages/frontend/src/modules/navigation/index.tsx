@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import HomePageContainer from '../home';
 import { APP_KEYS } from '../common/consts';
-import MyTodosContainer from '../my-todos';
-import CreateTodoPage from '../create-todo';
-import EditTodoPage from '../edit-todo';
+import MyTodosContainer from '../my-todos/todos-page.container';
+import CreateTodoPage from '../edit-and-create-todo/create-todo';
+import EditTodoPage from '../edit-and-create-todo/edit-todo';
 import ViewTodoPage from '../view-todo';
 
 export const MainRouter = () => (
