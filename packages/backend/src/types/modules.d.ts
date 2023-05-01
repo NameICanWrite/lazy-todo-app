@@ -4,6 +4,7 @@ declare global {
       MONGO_URI: string;
       JWT_SECRET: string;
       JWT_EXPIRATION: string;
+      CLIENT_ROOT_URL:string;
     }
   }
 }
