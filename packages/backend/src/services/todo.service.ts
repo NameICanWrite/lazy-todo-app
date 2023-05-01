@@ -23,7 +23,7 @@ export default class TodoService {
       },
       relations: ['user']
     })
-    return todos;
+    return todos || [];
   }
 
   async create(todo: ITodo, user: User) {

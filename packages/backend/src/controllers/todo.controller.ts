@@ -13,7 +13,7 @@ export class TodoController {
 
   async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
     const currentUserTodos = (req.user as User)?.todos
-    const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) || []
+    const currentUserTodosIds = currentUserTodos?.map((todo: ITodo) => todo.id) ?? []
     let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
     todos = todos.concat(currentUserTodos)
     return todos
