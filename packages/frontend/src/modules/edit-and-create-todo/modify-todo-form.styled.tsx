@@ -21,6 +21,7 @@ export const Button = styled('button')`
   display: block;
   width: 100%;
   height: 40px;
+  cursor: pointer;
 `
 export const IsPrivate = styled(Checkbox)`
   margin-bottom: ${SPACES.xs};

@@ -15,8 +15,8 @@ export const CreateButton = styled.button`
   width: 120px;
   height: 50px;
   background-color: transparent;
-  margin-bottom: ${SPACES.md}
-  cursor: pointer
+  margin-bottom: ${SPACES.md};
+  cursor: pointer;
 `
 
 export const TodosTable = styled('div')`
