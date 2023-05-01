@@ -19,7 +19,7 @@ export class TodoController {
     return todos
   }
 
-  async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response) {
+  async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response}) {
     await this.todoService.create(req.body, req.user as User)
     return 'Todo created'
   }

@@ -2,6 +2,7 @@ import { IUser } from '../types/user.type';
 import { User } from './../entities/User';
 
 import { entityTypes } from '../consts';
+import { DeepPartial } from 'typeorm';
 
 export default class UserService {
   async findAll() {

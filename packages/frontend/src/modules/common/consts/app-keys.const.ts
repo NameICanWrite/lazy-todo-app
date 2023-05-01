@@ -11,7 +11,8 @@ export const QUERY_KEYS = {
   EXAMPLE: 'EXAMPLE',
   TOKEN: 'TOKEN',
   STATISTIC: 'statistic',
-  TRENDING: 'trending'
+  TRENDING: 'trending',
+  TODOS: 'todos'
 };
 
 // Backend Routes
@@ -26,6 +27,17 @@ export const BACKEND_KEYS = {
 
 export const ROUTER_KEYS = {
   ROOT: '/',
+<<<<<<< HEAD
   HOME: 'home',
   AUTHORIZED: 'authorized'
+=======
+  HOME: '/home',
+  AUTHORIZED: '/authorized',
+  LOGIN: '/login',
+  SIGNUP:'/signup',
+  MY_TODOS: '/my-todos',
+  CREATE_TODO: '/create-todo',
+  EDIT_TODO: '/edit-todo',
+  VIEW_TODO: '/view-todo'
+>>>>>>> feature/vbaranivsky/connect-crud-with-frontend-dev
 };
