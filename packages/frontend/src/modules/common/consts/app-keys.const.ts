@@ -27,10 +27,6 @@ export const BACKEND_KEYS = {
 
 export const ROUTER_KEYS = {
   ROOT: '/',
-<<<<<<< HEAD
-  HOME: 'home',
-  AUTHORIZED: 'authorized'
-=======
   HOME: '/home',
   AUTHORIZED: '/authorized',
   LOGIN: '/login',
@@ -39,5 +35,6 @@ export const ROUTER_KEYS = {
   CREATE_TODO: '/create-todo',
   EDIT_TODO: '/edit-todo',
   VIEW_TODO: '/view-todo'
->>>>>>> feature/vbaranivsky/connect-crud-with-frontend-dev
 };
+
+export const SERVER_URL = 'http://localhost:5000'
