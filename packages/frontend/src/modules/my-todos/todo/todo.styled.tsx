@@ -8,7 +8,7 @@ export const Name = styled('h3')`
   border-right: 2px solid ${COLORS.black};
   display: flex;
   align-items: center;
-  ${DEVICE.tablet} {
+  @media ${DEVICE.tablet} {
     border: none;
     width: 100%;
     margin-bottom: ${SPACES.xs}
@@ -26,7 +26,7 @@ export const Description = styled('div')`
   display: flex;
   align-items: center;
   flex-grow: 1;
-  ${DEVICE.tablet} {
+  @media ${DEVICE.tablet} {
     border: none;
     width: 100%;
     min-height: 100px;
@@ -45,11 +45,12 @@ export const Container = styled('div') <{ index: number }>`
   display: flex;
   box-sizing: border-box;
   background-color: ${props => props.index % 2 === 0 ? COLORS.veryLight : COLORS.white};
-  ${DEVICE.tablet} {
+  @media ${DEVICE.tablet} {
     flex-direction: column;
     background-color: transparent;
+    justify-content: space-between;
   }
-  ${DEVICE.mobile} {
+  @media ${DEVICE.mobile} {
     margin-bottom: ${SPACES.sm}
   }
 `
@@ -61,20 +62,20 @@ export const Button = styled('button')`
 export const ViewButton = styled(Button)`
   margin-right: ${SPACES.xs};
   margin-left: ${SPACES.sm};
-  ${DEVICE.desktop} {
+  @media ${DEVICE.desktop} {
     margin-right: ${SPACES.xs};
     margin-left: ${SPACES.sm};
   };
 `
 export const DeleteButton = styled(Button)`
   margin-right: ${SPACES.sm};
-  ${DEVICE.desktop} {
+  @media ${DEVICE.desktop} {
     margin-right: ${SPACES.xs};
   }
 `
 export const CompleteButton = styled(SwitchButton)`
   margin-right: ${SPACES.md};
-  ${DEVICE.desktop} {
+  @media ${DEVICE.desktop} {
     margin-right: ${SPACES.sm};
   }
 `

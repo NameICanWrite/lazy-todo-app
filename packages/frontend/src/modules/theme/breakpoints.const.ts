@@ -6,9 +6,9 @@ export const BREAKPOINTS = {
 };
 
 export const DEVICE = {
-  mobile: `(min-width: ${BREAKPOINTS.mobile}px)`,
+  mobile: `(max-width: ${BREAKPOINTS.mobile}px)`,
   
-  smallTablet: `(min-width: ${BREAKPOINTS.smallTablet}px)`,
-  tablet: `(min-width: ${BREAKPOINTS.tablet}px)`,
-  desktop: `(min-width: ${BREAKPOINTS.desktop}px)`
+  smallTablet: `(max-width: ${BREAKPOINTS.smallTablet}px)`,
+  tablet: `(max-width: ${BREAKPOINTS.tablet}px)`,
+  desktop: `(max-width: ${BREAKPOINTS.desktop}px)`
 };

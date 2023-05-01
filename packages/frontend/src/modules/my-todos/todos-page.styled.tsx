@@ -3,10 +3,10 @@ import { COLORS, DEVICE, SPACES } from "../theme"
 
 export const Container = styled.div`
   padding: ${SPACES.sm};
-  ${DEVICE.tablet} {
+  @media ${DEVICE.tablet} {
     padding: ${SPACES.lg} ${SPACES.md};
   }
-  ${DEVICE.mobile} {
+  @media ${DEVICE.mobile} {
     padding: ${SPACES.lg} ${SPACES.xs};
   }
 `

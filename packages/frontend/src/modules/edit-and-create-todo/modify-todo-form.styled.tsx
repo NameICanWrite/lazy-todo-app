@@ -9,10 +9,10 @@ export const Form = styled('form')`
   width: 500px;
   height: fit-content;
   margin: 0 auto;
-  ${DEVICE.tablet} {
+  @media ${DEVICE.tablet} {
     width: 400px; 
   }
-  ${DEVICE.smallTablet} {
+  @media ${DEVICE.smallTablet} {
     width: 100%;
     padding: ${SPACES.xxs}
   }
