@@ -4,6 +4,7 @@ import { useQuery } from "react-query"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { useOneTodo } from "../common/hooks/use-one-todo"
+import { Description, Header, Wrapper } from "./view-todo.styled"
 
 const ViewTodoPage = () => {
   const todo = useOneTodo()
@@ -16,14 +17,6 @@ const ViewTodoPage = () => {
   )
 }
 
-export const Header = styled('h1')`
-`
 
-export const Description = styled('p')`
-`
-
-export const Wrapper = styled('div')`
-  margin: 10px
-`
 
 export default ViewTodoPage

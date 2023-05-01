@@ -6,6 +6,7 @@ import Slider from "../slider/slider";
 import styled from "styled-components";
 import { ITodo } from "../common/types/todos.type";
 import {FC} from 'react'
+import { Container, CreateButton, TodosTable } from "./todos-page.styled";
 
 export type TodosPageProps = {
   device: 'mobile' | 'desktop' | 'tablet',
@@ -80,23 +81,3 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
 
 export default TodosPageComponent;
 
-export const Container = styled.div`
-  padding: 20px;
-  @media(max-width: 768px) {
-    padding: 100px 50px;
-  }
-  @media(max-width: 425px) {
-    padding: 100px 10px;
-  }
-`
-export const CreateButton = styled.button`
-  width: 120px;
-  height: 50px;
-  background-color: transparent;
-  margin-bottom: 40px;
-  cursor: pointer
-`
-
-export const TodosTable = styled('div')`
-  border: 2px solid black;
-`

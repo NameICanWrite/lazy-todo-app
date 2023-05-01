@@ -16,7 +16,7 @@ import TodosPageComponent from './todos.page.component';
 
 const MyTodosContainer = () => {
   const history = useHistory()
-  const { isLoading, isError, data: todos, error, refetch } = useQuery<ITodo[]>(["todos"], () =>
+  const { isLoading, isError, data: todos, error, refetch } = useQuery<ITodo[]>([APP_KEYS.QUERY_KEYS.TODOS], () =>
     todoService.getAllTodos()
   )
   const onDeleteTodo = (id: string) => () => {
@@ -95,16 +95,3 @@ const MyTodosContainer = () => {
 
 export default MyTodosContainer;
 
-export const Container = styled.div`
-  padding: 20px;
-`
-export const Button = styled.button`
-  width: 120px;
-  height: 50px;
-  background-color: transparent;
-  margin-bottom: 20px;
-`
-
-export const TodosTable = styled('div')`
-  border: 2px solid black;
-`
