@@ -12,6 +12,7 @@ import Pagination from '../pagination/pagination';
 import Slider from '../slider/slider'
 import { useRadioGroup } from '@mui/material';
 import TodosPageComponent from './todos.page.component';
+import { BREAKPOINTS } from '../theme';
 
 
 const MyTodosContainer = () => {
@@ -35,13 +36,13 @@ const MyTodosContainer = () => {
 
   const onResize = useCallback(() => {
     const width = window.innerWidth
-    if (width >= 768 && deviceRef.current !== 'desktop') {
+    if (width >= BREAKPOINTS.tablet && deviceRef.current !== 'desktop') {
       deviceRef.current = 'desktop'
       setDevice(deviceRef.current)
-    } else if (width < 768 && width >= 425 && deviceRef.current !== 'tablet') {
+    } else if (width < BREAKPOINTS.tablet && width >= BREAKPOINTS.mobile && deviceRef.current !== 'tablet') {
       deviceRef.current = 'tablet'
       setDevice(deviceRef.current)
-    } else if (width < 425 && deviceRef.current !== 'mobile') {
+    } else if (width < BREAKPOINTS.mobile && deviceRef.current !== 'mobile') {
       deviceRef.current = 'mobile'
       setDevice(deviceRef.current)
     }
