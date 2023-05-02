@@ -10,13 +10,13 @@ export default class UserService {
     return users;
   }
 
-  async create({name, password}: {name: string, password: string}) {
-    const saved = await User.save({name, password} as DeepPartial<User>)
+  async create({email, password}: {email: string, password: string}) {
+    const saved = await User.save({email, password} as DeepPartial<User>)
     return saved
   }
 
   async changePassword(id: string, password: string) {
-    const user = await User.update(id, {password})
+    const user = await User.update(id, {password, passwordResetCode: '0', passwordResetCodeExpiresAt: '0'})
     return user
   }
 
@@ -25,9 +25,12 @@ export default class UserService {
     return user
   }
 
-  async findByName(name: string) {
-    const user = await User.findOne({where: {name}, relations: ['todos']})
+  async findByEmail(email: string) {
+    const user = await User.findOne({where: {email}, relations: ['todos']})
     return user
+  }
+  async addPasswordResetCode(email: string, code: string) {
+    await User.update({email}, {passwordResetCode: code, passwordResetCodeExpiresAt: (Date.now() + 60 * 1000 * 10).toString()})
   }
 
   async delete(id: string) {

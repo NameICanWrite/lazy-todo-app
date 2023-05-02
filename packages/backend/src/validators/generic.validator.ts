@@ -16,7 +16,13 @@ export class GenericValidator {
   constructor() {}
   
   isBodyValidEntity(Entity:  any) {
-    const entityType = findTableFromEntity(Entity)
+    let entityType
+    if(!(typeof Entity === 'string')) {
+      entityType = findTableFromEntity(Entity)
+    } else {
+      entityType = Entity
+    }
+    
     let joiSchema: Joi.ObjectSchema
     if (entityType && validationSchemas.hasOwnProperty(entityType)) {
       const entityProp = entityType as keyof typeof validationSchemas
