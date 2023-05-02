@@ -26,6 +26,7 @@ export const CreateButton = styled.button`
 
 export const TodosTable = styled('div')`
   border: 2px solid ${COLORS.black};
+  margin-bottom: ${SPACES.sm};
 `
 
 export const Arrow = styled('div')`
@@ -35,9 +36,6 @@ export const Arrow = styled('div')`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  /* background-color: black;
-  height: 40px;
-  width: 40px */
 `
 
 export const PrevArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-prev'}))`

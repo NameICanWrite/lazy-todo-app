@@ -7,7 +7,5 @@ export const SPACES = {
   xs: '10px',
   sm: '20px',
   md: '50px',
-  lg: '100px',
-  // xl: '48px',
-  // xxl: '64px'
-}; 
+  lg: '100px'
+};

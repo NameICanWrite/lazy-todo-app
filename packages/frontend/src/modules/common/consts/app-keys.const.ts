@@ -15,6 +15,11 @@ export const QUERY_KEYS = {
   TODOS: 'todos'
 };
 
+export const QUERY_ACTIONS = {
+  delete: 'DELETE',
+  update: 'UPDATE'
+}
+
 // Backend Routes
 export const BACKEND_KEYS = {
   EXAMPLE: 'example',

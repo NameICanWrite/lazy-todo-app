@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
       cacheTime: Infinity
     }
   }
-});
+})
 
 const AppContainer = () => (
   <ThemeProvider theme={theme}>
@@ -28,6 +28,6 @@ const AppContainer = () => (
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </ThemeProvider>
-);
+)
 
-export default AppContainer;
+export default AppContainer
