@@ -9,20 +9,20 @@ import { APP_KEYS } from '../common/consts';
 import styled from 'styled-components';
 import SwitchButton from './switch-button/switch-button';
 import Pagination from '../pagination/pagination';
-import Slider from '../slider/slider'
 import { useRadioGroup } from '@mui/material';
-import TodosPageComponent from './todos.page.component';
+import TodosPageComponent from './todos-page.component';
 import { BREAKPOINTS } from '../theme';
 
 
 const MyTodosContainer = () => {
   const history = useHistory()
   const { isLoading, isError, data: todos, error, refetch } = useQuery<ITodo[]>([APP_KEYS.QUERY_KEYS.TODOS], () =>
-    todoService.getAllTodos()
+    todoService.getAllTodos(),
+    {refetchOnMount: 'always'}
   )
-  const onDeleteTodo = (id: string) => () => {
-    todoService.deleteTodo(id).then(() => {
-      refetch()
+  const onDeleteTodo =  (id: string) => () => {
+    todoService.deleteTodo(id).then(async () => {
+      await refetch()
     })
   }
   const onCompleteTodo = (id: string) => () => {

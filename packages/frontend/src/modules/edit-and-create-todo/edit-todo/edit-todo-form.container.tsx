@@ -6,7 +6,6 @@ import { APP_KEYS } from "../../common/consts"
 import { ITodo } from "../../common/types/todos.type"
 import { useEffect } from "react"
 import ModifyTodoForm from "../modify-todo-form"
-import { useOneTodo } from "../../common/hooks/use-one-todo"
 
 const EditTodoFormContainer = ({todo}: {todo: ITodo}) => {
   const history = useHistory()

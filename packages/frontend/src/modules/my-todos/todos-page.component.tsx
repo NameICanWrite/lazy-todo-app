@@ -2,25 +2,30 @@ import { useHistory } from "react-router-dom";
 import { APP_KEYS } from "../common/consts";
 import Pagination from "../pagination/pagination";
 import Todo from "./todo/todo";
-import Slider from "../slider/slider";
+// import Slider from "../slider/slider";
 import styled from "styled-components";
 import { ITodo } from "../common/types/todos.type";
-import {FC} from 'react'
-import { Container, CreateButton, TodosTable } from "./todos-page.styled";
-
+import { FC, useEffect } from 'react'
+import { Container, CreateButton, TodosTable, SliderContainer, PrevArrow, NextArrow } from "./todos-page.styled";
+import Slider from 'react-material-ui-carousel'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css';
+import { Navigation } from "swiper";
+ 
 export type TodosPageProps = {
   device: 'mobile' | 'desktop' | 'tablet',
   todos: ITodo[],
-  onCompleteTodo: (id: string) => void,
-  onDeleteTodo: (id: string) => void,
+  onCompleteTodo: (id: string) => () => void,
+  onDeleteTodo: (id: string) => () => void,
   pagesNumber: number,
   currentPage: number,
   setCurrentPage: (number: number) => void
 }
 
 const TodosPageComponent: FC<TodosPageProps> = (props) => {
-  const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage} = props
+  const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage } = props
   const history = useHistory()
+  
   return (
     <Container>
       <CreateButton onClick={() => history.push(APP_KEYS.ROUTER_KEYS.CREATE_TODO)}>
@@ -38,29 +43,46 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
                     index={index}
                     key={todo.id}
                     todo={todo}
-                    onDelete={() => onDeleteTodo(todo.id)}
-                    onComplete={() => onCompleteTodo(todo.id)}
+                    onDelete={onDeleteTodo(todo.id)}
+                    onComplete={onCompleteTodo(todo.id)}
                   />
                 ))}
           </TodosTable>
           <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pagesNumber={pagesNumber} />
         </>
       ) : device === 'tablet' ? (
-        <>
+        <SliderContainer>
           {todos && (
-            <Slider perSlide={1}>
+            <Swiper
+              spaceBetween={50}
+              slidesPerView={1}
+              onSlideChange={() => console.log('slide change')}
+              onSwiper={(swiper) => console.log(swiper)}
+              pagination={{ clickable: true }}
+              modules={[Navigation]}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
+              style={{
+                left: 0
+              }}
+            >
               {todos.map((todo, index) => (
-                <Todo
-                  index={index}
-                  key={todo.id}
-                  todo={todo}
-                  onDelete={() => onDeleteTodo(todo.id)}
-                  onComplete={() => onCompleteTodo(todo.id)}
-                />
+                <SwiperSlide key={todo.id}>
+                  <Todo
+                    index={index}
+                    todo={todo}
+                    onDelete={() => onDeleteTodo(todo.id)}
+                    onComplete={() => onCompleteTodo(todo.id)}
+                  />
+                </SwiperSlide>
               ))}
-            </Slider>
+            </Swiper>
           )}
-        </>
+          <PrevArrow/>
+          <NextArrow/>
+        </SliderContainer>
       ) : (
         <>
           {todos && todos.map((todo, index) => (

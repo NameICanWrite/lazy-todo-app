@@ -10,7 +10,7 @@ import { SPACES } from "../../theme"
 import { FONT_SIZES } from "../../theme/fonts.const"
 
 const EditTodoPage = () => {
-  const todo = useOneTodo()
+  const {todo} = useOneTodo()
   return (
     <div>
       <H1>Edit Todo Page</H1>

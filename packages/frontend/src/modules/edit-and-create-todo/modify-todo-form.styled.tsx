@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import Checkbox from "../my-todos/switch-button/switch-button"
+import SwitchButton from "../my-todos/switch-button/switch-button"
 import { DEVICE, SPACES } from "../theme"
 
 export const Form = styled('form')`
@@ -23,6 +23,6 @@ export const Button = styled('button')`
   height: 40px;
   cursor: pointer;
 `
-export const IsPrivate = styled(Checkbox)`
+export const IsPrivate = styled(SwitchButton)`
   margin-bottom: ${SPACES.xs};
 `
