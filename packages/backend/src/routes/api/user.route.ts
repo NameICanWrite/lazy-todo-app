@@ -8,7 +8,8 @@ const router: Router = Router();
 // @route   POST api/user
 // @desc    Register user given their email and password, returns the token upon successful registration
 // @access  Public
-router.post('/signup', AddAuthToken(userController.signup.bind(userController)));
+// router.post('/signup', AddAuthToken(userController.signup.bind(userController)));
+router.post('/signup-secure', AddAuthToken(userController.signup.bind(userController)));
 router.post('/login', AddAuthToken(userController.login.bind(userController)))
 router.get('/current', authAndGetUser, TryCatch(userController.getCurrentUser))
 router.get('/current/todos', authAndGetUser, TryCatch(userController.getCurrentUserTodos))

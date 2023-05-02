@@ -27,14 +27,6 @@ export const BACKEND_KEYS = {
 
 export const ROUTER_KEYS = {
   ROOT: '/',
-  HOME: '/home',
-  AUTHORIZED: '/authorized',
-  LOGIN: '/login',
-  SIGNUP:'/signup',
-  MY_TODOS: '/my-todos',
-  CREATE_TODO: '/create-todo',
-  EDIT_TODO: '/edit-todo',
-  VIEW_TODO: '/view-todo'
+  HOME: 'home',
+  AUTHORIZED: 'authorized'
 };
-
-export const SERVER_URL = 'http://localhost:5000'

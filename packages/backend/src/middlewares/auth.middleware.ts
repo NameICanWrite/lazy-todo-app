@@ -13,8 +13,16 @@ dotenv.config()
 
 const userService = new UserService()
 
+const extractorFromTokenParam = (req: Request) => {
+  let token = null;
+  if (req && req.params.token) {
+      token = req.params.token;
+  }
+    return token;
+}
+
 export const passportOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('JWT'),
+  jwtFromRequest: ExtractJwt.fromExtractors([ExtractJwt.fromAuthHeaderWithScheme('JWT'), extractorFromTokenParam]),
   secretOrKey: process.env.JWT_SECRET
 };
 
@@ -44,10 +52,10 @@ export const authAndGetUser = TryCatch(async (req: Request, res: Response, next:
       res.status(401)
       errMessage = 'You should login first!'
       console.log('errored');
-      return resolve()
+      return resolve(1)
     }
     req.user = user
-    return resolve()
+    return resolve(1)
   })(req, res, next))
 
   return errMessage || next()
