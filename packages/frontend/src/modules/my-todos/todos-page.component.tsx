@@ -13,6 +13,7 @@ import { Navigation } from "swiper";
 import {DeviceResolution} from '../common/types/devices.types'
 import Pagination from '@mui/material/Pagination'
 import pagination from '../pagination/pagination'
+import { useQueryParams } from "../common/hooks/useQueryParams";
 
 export type TodosPageProps = {
     device: DeviceResolution,
@@ -26,11 +27,18 @@ export type TodosPageProps = {
     onFilterClick: (filter: string | undefined) => void
 }
 
+const STATUSES = {
+    ALL: 'all',
+    PUBLIC: 'public',
+    PRIVATE: 'private',
+    COMPLETED: 'completed'
+}
+
 const TodosPageComponent: FC<TodosPageProps> = (props) => {
     const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage, onSearchChange, onFilterClick} = props
     const history = useHistory()
 
-    const [currentFilter, setCurrentFilter] = useState('all')
+    const [currentFilter, setCurrentFilter] = useState(useQueryParams().get('status') || STATUSES.ALL)
 
     const renderTodos = () => {
         if(device === 'desktop') {
@@ -115,7 +123,12 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
             ))}
         </>
     }
-
+    
+    const handleButtonFilter = (status: string | undefined) => () => {
+        setCurrentFilter(status)
+        if (status === STATUSES.ALL) status = undefined
+        onFilterClick(status)
+    }
     return (
         <Container>
             <CreateButton onClick={() => history.push(APP_KEYS.ROUTER_KEYS.CREATE_TODO)}>
@@ -124,32 +137,20 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
             <SearchInput onChange={onSearchChange} placeholder="Search todos" />
             <FiltersContainer>
                 <FilterButton 
-                isSelected={currentFilter === 'all'}
-                onClick={() => {
-                    onFilterClick()
-                    setCurrentFilter('all')
-                }}>All</FilterButton>
+                isSelected={currentFilter === STATUSES.ALL}
+                onClick={handleButtonFilter(STATUSES.ALL)}>All</FilterButton>
 
                 <FilterButton 
-                isSelected={currentFilter === 'public'}
-                onClick={() => {
-                    onFilterClick('public')
-                    setCurrentFilter('public')
-                }}>Public</FilterButton>
+                isSelected={currentFilter === STATUSES.PUBLIC}
+                onClick={handleButtonFilter('public')}>Public</FilterButton>
 
                 <FilterButton 
-                isSelected={currentFilter === 'private'}
-                onClick={() => {
-                    onFilterClick('private')
-                    setCurrentFilter('private')
-                }}>Private</FilterButton>
+                isSelected={currentFilter === STATUSES.PRIVATE}
+                onClick={handleButtonFilter(STATUSES.PRIVATE)}>Private</FilterButton>
 
                 <FilterButton 
-                isSelected={currentFilter === 'completed'}
-                onClick={() => {
-                    onFilterClick('completed')
-                    setCurrentFilter('completed')
-                }}>Completed</FilterButton>
+                isSelected={currentFilter === STATUSES.COMPLETED}
+                onClick={handleButtonFilter(STATUSES.COMPLETED)}>Completed</FilterButton>
             </FiltersContainer>
             {renderTodos()}
         </Container>

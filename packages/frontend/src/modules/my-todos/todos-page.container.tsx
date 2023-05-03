@@ -20,9 +20,13 @@ import { useQueryParams } from '../common/hooks/useQueryParams'
 const MyTodosContainer = () => {
     const history = useHistory()
     const query = useQueryParams()
-    const {isLoading, isError, data: todos, error, refetch} = useQuery<ITodo[]>([APP_KEYS.QUERY_KEYS.TODOS, query.get('search'), query.get('status')], () =>
+
+    const {isLoading, isError, data: fetchedTodos, error, refetch} = useQuery<{todos: ITodo[], totalTodos: number}>([APP_KEYS.QUERY_KEYS.TODOS, query.get('search'), query.get('status')], () =>
         todoService.getAllTodos({search: query.get('search'), status: query.get('status')}),
     )
+    const todos = fetchedTodos?.todos
+    const totalTodos = fetchedTodos?.totalTodos
+    console.log(todos);
 
     const setClientTodos = useSetClientTodos()
 
@@ -37,7 +41,7 @@ const MyTodosContainer = () => {
             setClientTodos({action: 'UPDATE', todo})
         })
     }
-    const editUrlParam = (key, value) => {
+    const editUrlParam = (key: string, value: string) => {
         let params = {}
         query.delete(key)
         query.forEach((value, key) => {
