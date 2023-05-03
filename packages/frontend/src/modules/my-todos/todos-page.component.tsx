@@ -4,8 +4,8 @@ import { APP_KEYS } from "../common/consts";
 import Todo from "./todo/todo";
 import styled from "styled-components";
 import { ITodo } from "../common/types/todos.type";
-import { FC, useEffect } from 'react'
-import { Container, CreateButton, TodosTable, SliderContainer, PrevArrow, NextArrow } from "./todos-page.styled";
+import { FC, useEffect, useState } from 'react'
+import { Container, CreateButton, TodosTable, SliderContainer, PrevArrow, NextArrow, FiltersContainer, FilterButton, SearchInput } from "./todos-page.styled";
 import Slider from 'react-material-ui-carousel'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css';
@@ -21,12 +21,16 @@ export type TodosPageProps = {
     onDeleteTodo: (id: string) => () => void,
     pagesNumber: number,
     currentPage: number,
-    setCurrentPage: (_: any, number: number) => void
+    setCurrentPage: (_: any, number: number) => void,
+    onSearchChange: (e: InputEvent) => void,
+    onFilterClick: (filter: string | undefined) => void
 }
 
 const TodosPageComponent: FC<TodosPageProps> = (props) => {
-    const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage} = props
+    const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage, onSearchChange, onFilterClick} = props
     const history = useHistory()
+
+    const [currentFilter, setCurrentFilter] = useState('all')
 
     const renderTodos = () => {
         if(device === 'desktop') {
@@ -117,6 +121,36 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
             <CreateButton onClick={() => history.push(APP_KEYS.ROUTER_KEYS.CREATE_TODO)}>
                 Create todo
             </CreateButton>
+            <SearchInput onChange={onSearchChange} placeholder="Search todos" />
+            <FiltersContainer>
+                <FilterButton 
+                isSelected={currentFilter === 'all'}
+                onClick={() => {
+                    onFilterClick()
+                    setCurrentFilter('all')
+                }}>All</FilterButton>
+
+                <FilterButton 
+                isSelected={currentFilter === 'public'}
+                onClick={() => {
+                    onFilterClick('public')
+                    setCurrentFilter('public')
+                }}>Public</FilterButton>
+
+                <FilterButton 
+                isSelected={currentFilter === 'private'}
+                onClick={() => {
+                    onFilterClick('private')
+                    setCurrentFilter('private')
+                }}>Private</FilterButton>
+
+                <FilterButton 
+                isSelected={currentFilter === 'completed'}
+                onClick={() => {
+                    onFilterClick('completed')
+                    setCurrentFilter('completed')
+                }}>Completed</FilterButton>
+            </FiltersContainer>
             {renderTodos()}
         </Container>
     )

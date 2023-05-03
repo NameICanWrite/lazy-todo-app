@@ -6,9 +6,10 @@ class TodoService extends HttpService {
   constructor() {
     super();
   }
-  getAllTodos() {
+  getAllTodos(params: object) {
     return this.get({
       url: 'todos',
+      params
     })
   }
   editTodo(todo: ITodo) {

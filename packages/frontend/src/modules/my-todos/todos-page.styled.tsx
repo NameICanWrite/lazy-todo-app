@@ -1,5 +1,6 @@
 import styled from "styled-components"
-import { COLORS, DEVICE, SPACES } from "../theme"
+import { BREAKPOINTS, COLORS, DEVICE, SPACES } from "../theme"
+import Input from "./input/input"
 
 export const Container = styled.div`
   padding: ${SPACES.sm};
@@ -81,4 +82,30 @@ export const NextArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-n
     right: 2px;
     border-left-color: ${COLORS.white}
   }
+`
+
+export const SearchInput = styled(Input)`
+ width: 300px;
+ margin-right: 0;
+ margin-left: auto;
+ display: block;
+`
+
+export const FiltersContainer = styled('div')`
+  display: flex;
+  width: ${BREAKPOINTS.mobile};
+  justify-content: space-around;
+  flex-wrap: wrap;
+`
+
+export const FilterButton = styled('button')`
+  width: 100px;
+  height: 30px;
+  background-color: ${({isSelected}: {isSelected: boolean}) => 
+    isSelected ? COLORS.veryLight : 'transparent'
+  };
+  /* margin: ${SPACES.xxs}; */
+  margin-bottom: ${SPACES.sm};
+  display: block
+  cursor: pointer;
 `

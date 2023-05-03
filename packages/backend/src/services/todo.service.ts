@@ -37,6 +37,7 @@ export default class TodoService {
 
   async findAllCompleted({ search}: { search: string | undefined}) {
     let todos 
+    console.log('inside servicejjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
     if (search) {
       todos = await Todo.find({where: {
           isCompleted: true, 
@@ -57,7 +58,13 @@ export default class TodoService {
   async create(todo: ITodo, user: User) {
     todo.user = user
     const toBeSaved = await Todo.save(todo as DeepPartial<Todo>)
+    return toBeSaved
   }
+
+  async edit(id: string, newTodo: ITodo) {
+    const todo = await Todo.update(id, newTodo)
+    return todo
+}
 
     async findById(id: string) {
         const todo = await Todo.findOneBy({id})

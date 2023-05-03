@@ -11,13 +11,13 @@ import { User } from '../entities/User';
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
-    const currentUserTodos = (req.user as User)?.todos || []
-    const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) ?? []
-    let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
-    todos = todos.concat(currentUserTodos)
-    return todos
-  }
+  // async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
+  //   const currentUserTodos = (req.user as User)?.todos || []
+  //   const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) ?? []
+  //   let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
+  //   todos = todos.concat(currentUserTodos)
+  //   return todos
+  // }
 
   async getAllVisibleTodosAndFilter(
       req: Request & {
@@ -31,12 +31,13 @@ export class TodoController {
       const {status, search} = req.query
       let todos = []
       const removeOthersPrivateTodos = (todo: ITodo) => {
-        if (todo && !todo.isPrivate || todo.user.id == req.user.id) return true
+        if (todo && (!todo.isPrivate || todo.user?.id == req.user?.id)) return true
         else return false
       }
       switch(status) {
         case 'completed': 
           todos = await this.todoService.findAllCompleted({search})
+          console.log(todos);
           todos = todos.filter(removeOthersPrivateTodos)
           return todos
         case 'private': 
@@ -61,8 +62,8 @@ export class TodoController {
   // }
 
   async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response}) {
-    await this.todoService.create(req.body, req.user as User)
-    return 'Todo created'
+    const todo = await this.todoService.create(req.body, req.user as User)
+    return todo
   }
 
   async getOneTodo(req: Request<{id: string}> & {user: User}, res: Response) {

@@ -20,7 +20,7 @@ const Input: FC<InputProps> = (props) => {
     const {placeholder, name, value, className, onChange, error, type, label} = props
 
     return (
-        <Container>
+        <Container className={className}>
             <Label label={label} htmlFor={name}>
                 {label}
             </Label>
