@@ -1,0 +1,55 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Users\Admin\AppData\Local\Temp\yarn--1683103951767-0.4767912461294661;C:\Users\Admin\Desktop\learn\build\cgs-team-camp\node_modules\.bin;C:\Users\Admin\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Admin\Desktop\learn\build\cgs-team-camp\node_modules\.bin;C:\Users\Admin\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Python311\Scripts\;C:\Python311\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\ffmpeg\bin;C:\Program Files\Inkscape\bin;C:\Users\Admin\Downloads\curl-7.81.0\curl-7.81.0;C:\Program Files\curl;C:\Users\Admin\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Admin\AppData\Local\Programs\Python\Python310\;C:\Users\Admin\.local\share\solana\install\active_release\bin;C:\Users\Admin\.cargo\bin;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Admin\AppData\Roaming\npm;C:\Users\Admin\AppData\Local\Programs\mongosh\;C:\Program Files\MongoDB\Server\5.0\bin;C:\Program Files (x86)\mitmproxy\bin;C:\Program Files\scrcpy;C:\android-platform-tools;C:\Program Files\dex2jar;C:\Program Files\git-filter-repo;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\Admin\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Admin\AppData\Local\Programs\Python\Python310\;C:\Users\Admin\.local\share\solana\install\active_release\bin;C:\Users\Admin\.cargo\bin;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Admin\AppData\Local\Programs\mongosh\;C:\Program Files\MongoDB\Server\5.0\bin;;C:\Program Files (x86)\mitmproxy\bin;C:\Users\Admin\.fly\bin;C:\Users\Admin\.deta\bin;C:\Users\Admin\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.14.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
+
+npm manifest: 
+  {
+    "name": "cgs-team-boilerplate",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": true,
+    "workspaces": [
+      "packages/*"
+    ],
+    "scripts": {
+      "configure:hooks": "yarn && chmod +x ./hooks/setup-hooks && ./hooks/setup-hooks",
+      "configure:hooks:windows": "yarn && bash hooks/setup-hooks",
+      "start": "yarn && lerna run --parallel start",
+      "lint:fix": "npx eslint packages/**/*.ts packages/**/*.tsx --fix",
+      "dev": "concurrently \"npm start --prefix packages/frontend\" \"npm run server --prefix packages/backend\""
+    },
+    "devDependencies": {
+      "eslint": "^8.22.0",
+      "eslint-config-airbnb": "^19.0.4",
+      "eslint-config-airbnb-typescript": "^17.0.0",
+      "eslint-config-prettier": "^8.5.0",
+      "eslint-import-resolver-typescript": "^3.4.2",
+      "eslint-plugin-prettier": "^4.2.1",
+      "lerna": "^4.0.0",
+      "prettier": "^2.7.1",
+      "typescript": "^4.7.4"
+    },
+    "dependencies": {}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

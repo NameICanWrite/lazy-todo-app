@@ -15,6 +15,11 @@ export const QUERY_KEYS = {
   TODOS: 'todos'
 };
 
+export const QUERY_ACTIONS = {
+  delete: 'DELETE',
+  update: 'UPDATE'
+}
+
 // Backend Routes
 export const BACKEND_KEYS = {
   EXAMPLE: 'example',
@@ -36,3 +41,5 @@ export const ROUTER_KEYS = {
   EDIT_TODO: '/edit-todo',
   VIEW_TODO: '/view-todo'
 };
+
+export const SERVER_URL = 'http://localhost:5000'
