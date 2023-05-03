@@ -1,7 +1,7 @@
 import { IUser } from '../types/user.type';
 import { ITodo } from '../types/todos.type';
 import { Todo } from './../entities/Todo';
-import { DeepPartial, In, Not } from 'typeorm';
+import { DeepPartial, ILike, In, Like, Not } from 'typeorm';
 import { User } from '../entities/User';
 
 import { entityTypes } from '../consts';
@@ -16,13 +16,41 @@ export default class TodoService {
         return todos
     }
 
-  async findAllPublic({excludeIds}: {excludeIds: string[]}) {
-    const todos = await Todo.find({where: {
-        isPrivate: false, 
-        id: Not(In(excludeIds))
-      },
-      relations: ['user']
-    })
+  async findAllPublic({search}: {search: string | undefined}) {
+    let todos 
+    if (search) {
+      todos = await Todo.find({where: {
+          isPrivate: false, 
+          name: ILike(`%${search || ''}%`)
+        },
+        relations: ['user']
+      })
+    } else {
+      todos = await Todo.find({where: {
+          isPrivate: false, 
+        },
+        relations: ['user']
+      })
+    }
+    return todos || [];
+  }
+
+  async findAllCompleted({ search}: { search: string | undefined}) {
+    let todos 
+    if (search) {
+      todos = await Todo.find({where: {
+          isCompleted: true, 
+          name: ILike(`%${search || ''}%`)
+        },
+        relations: ['user']
+      })
+    } else {
+      todos = await Todo.find({where: {
+          isCompleted: true, 
+        },
+        relations: ['user']
+      })
+    }
     return todos || [];
   }
 

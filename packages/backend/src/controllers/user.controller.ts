@@ -100,7 +100,6 @@ export class UserController {
   }
 
   async resetPasswordWithCode(req: Request<any, any, {email: string, code: string, newPassword: string}>, res: Response, next: NextFunction) {
-    console.log('fffffffffffffffffffffffffffffffffffffffffffffffffffffffff12sdgsdgsdgsg3');
     const {email, code, newPassword } = req.body
     
     const existingUser = await this.userService.findByEmail(email);

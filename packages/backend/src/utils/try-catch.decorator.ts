@@ -46,7 +46,7 @@ function TryCatchFunction(target: Function) {
     return target
 }
 
-export default function TryCatch(target: any) {
+export default function TryCatch(target: Function) {
     if (isClass(target)) return TryCatchClass(target)
     if (isAsyncFunction(target)) return TryCatchFunction(target)
 }

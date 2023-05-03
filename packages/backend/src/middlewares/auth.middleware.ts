@@ -72,7 +72,7 @@ export const authAndGetUser = TryCatch(async (req: Request, res: Response, next:
 })
 
 export const authAndGetSignupFields = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('jwt-signup', { session: false }, (err: any, signupFields: ISignupFields) => {
+  passport.authenticate(passportJwtStrategySignup, { session: false }, (err: any, signupFields: ISignupFields) => {
     req.body = signupFields
     console.log(req.body);
   })(req, res, next)
@@ -81,7 +81,7 @@ export const authAndGetSignupFields = TryCatch(async (req: Request, res: Respons
 
 
 export const optionalAuthAndGetUser = TryCatch(async (req: Request, res: Response, next: NextFunction) => {
-  await new Promise(resolve => passport.authenticate('jwt', { session: false }, (err: any, user: User) => {
+  await new Promise(resolve => passport.authenticate('jwt-login', { session: false }, (err: any, user: User) => {
     req.user = user || null
     resolve(1)
   })(req, res, next))
