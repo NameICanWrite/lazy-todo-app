@@ -1,6 +1,8 @@
 import styled from "styled-components"
-import Checkbox from "../my-todos/switch-button/switch-button"
+import SwitchButton from "../my-todos/switch-button/switch-button"
 import { DEVICE, SPACES } from "../theme"
+import {FONT_SIZES} from '../theme/fonts.const'
+import {Typography} from '@mui/material'
 
 export const Form = styled('form')`
   display: flex;
@@ -23,6 +25,12 @@ export const Button = styled('button')`
   height: 40px;
   cursor: pointer;
 `
-export const IsPrivate = styled(Checkbox)`
+export const IsPrivate = styled(SwitchButton)`
   margin-bottom: ${SPACES.xs};
+`
+export const Header = styled(Typography)`
+  font-size: ${FONT_SIZES.l};
+  text-align: center;
+  margin-top: ${SPACES.l};
+  
 `

@@ -47,10 +47,12 @@ export const Container = styled('div') <{ index: number }>`
   background-color: ${props => props.index % 2 === 0 ? COLORS.veryLight : COLORS.white};
   @media ${DEVICE.tablet} {
     flex-direction: column;
+    border: 2px solid black;
     background-color: transparent;
     justify-content: space-between;
   }
   @media ${DEVICE.mobile} {
+    border: none;
     margin-bottom: ${SPACES.sm}
   }
 `

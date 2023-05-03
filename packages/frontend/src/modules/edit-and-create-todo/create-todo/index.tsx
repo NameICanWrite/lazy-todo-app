@@ -1,15 +1,18 @@
-
-
-import { H1 } from "../edit-todo"
-import CreateTodoFormContainer from "./create-todo-form.container"
+import CreateTodoFormContainer from './create-todo-form.container'
+import {Header} from '../modify-todo-form.styled'
+import {Typography} from '@mui/material'
 
 const CreateTodoPage = () => {
-  return (
-    <div>
-      <H1>Create Todo Page</H1>
-      <CreateTodoFormContainer />
-    </div>
-  )
+
+    return (
+        <div>
+            <Header>
+                Create Todo Page
+            </Header>
+            {/*<Header></Header>*/}
+            <CreateTodoFormContainer/>
+        </div>
+    )
 }
 
 export default CreateTodoPage

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Input from '../input/input'
 import { CheckField, Circle, Container, Label, Wrapper } from './switch-button.styled'
 
-export type CheckboxProps = {
+export type SwitchButtonProps = {
   on: boolean,
   onSwitch: (event: ChangeEvent<HTMLInputElement>) => void,
   className?: string,
@@ -12,7 +12,7 @@ export type CheckboxProps = {
   label?: string
 }
 
-const Checkbox: FC<CheckboxProps> = (props) => {
+const SwitchButton: FC<SwitchButtonProps> = (props) => {
   const { on, onSwitch, className, id, name, label } = props
   return (
     <Container className={className ?? ''}>
@@ -32,5 +32,5 @@ const Checkbox: FC<CheckboxProps> = (props) => {
   )
 }
 
-export default Checkbox
+export default SwitchButton
 
