@@ -11,7 +11,8 @@
     "configure:hooks": "yarn && chmod +x ./hooks/setup-hooks && ./hooks/setup-hooks",
     "configure:hooks:windows": "yarn && bash hooks/setup-hooks",
     "start": "yarn && lerna run --parallel start",
-    "lint:fix": "npx eslint packages/**/*.ts packages/**/*.tsx --fix"
+    "lint:fix": "npx eslint packages/**/*.ts packages/**/*.tsx --fix",
+    "dev": "concurrently \"npm start --prefix packages/frontend\" \"npm run server --prefix packages/backend\""
   },
   "devDependencies": {
     "eslint": "^8.22.0",

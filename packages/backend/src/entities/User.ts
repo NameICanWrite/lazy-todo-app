@@ -5,6 +5,6 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
-  email: string;
+  // @Column()
+  // email: string;
 }

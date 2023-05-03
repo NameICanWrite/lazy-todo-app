@@ -1,0 +1,86 @@
+import axios from 'axios'
+import React, {useEffect, useState, useMemo, useLayoutEffect, useRef, useCallback} from 'react'
+import {useQuery} from 'react-query'
+import Todo from './todo/todo'
+import {ITodo} from '../common/types/todos.type'
+import todoService from '../../service/todos'
+import {useHistory} from 'react-router-dom'
+import {APP_KEYS} from '../common/consts'
+import styled from 'styled-components'
+import SwitchButton from './switch-button/switch-button'
+import Pagination from '../pagination/pagination'
+import {useRadioGroup} from '@mui/material'
+import TodosPageComponent from './todos-page.component'
+import {BREAKPOINTS} from '../theme'
+import {useSetClientTodos} from '../common/hooks/use-set-client-todos'
+import {DeviceResolution} from '../common/types/devices.types'
+
+const MyTodosContainer = () => {
+    const history = useHistory()
+    const {isLoading, isError, data: todos, error, refetch} = useQuery<ITodo[]>([APP_KEYS.QUERY_KEYS.TODOS], () =>
+        todoService.getAllTodos(),
+    )
+
+    const setClientTodos = useSetClientTodos()
+
+    const onDeleteTodo = (id: string) => () => {
+        todoService.deleteTodo(id).then(() => {
+            setClientTodos({action: 'DELETE', id})
+        })
+    }
+    const onCompleteTodo = (todo: ITodo) => () => {
+        todoService.completeTodo(todo.id).then(() => {
+            todo.isCompleted = true
+            setClientTodos({action: 'UPDATE', todo})
+        })
+    }
+
+    const [device, setDevice] = useState<DeviceResolution>('desktop')
+    const deviceRef = useRef(device)
+
+    const onResize = useCallback(() => {
+        const width = window.innerWidth
+        if (width >= BREAKPOINTS.tablet && deviceRef.current !== 'desktop') {
+            deviceRef.current = 'desktop'
+            setDevice(deviceRef.current)
+        } else if (width < BREAKPOINTS.tablet && width >= BREAKPOINTS.mobile && deviceRef.current !== 'tablet') {
+            deviceRef.current = 'tablet'
+            setDevice(deviceRef.current)
+        } else if (width < BREAKPOINTS.mobile && deviceRef.current !== 'mobile') {
+            deviceRef.current = 'mobile'
+            setDevice(deviceRef.current)
+        }
+    }, [])
+
+    useLayoutEffect(() => {
+        refetch()
+        onResize()
+        window.addEventListener('resize', onResize)
+        return () => {
+            window.removeEventListener('resize', onResize)
+        }
+    }, [])
+
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const onCurrentPage = (_: any, number: number) => {
+        setCurrentPage(number)
+    }
+
+    const pagesNumber = !todos ? 0 : Math.ceil(todos.length / 10)
+
+    return (
+        <TodosPageComponent
+            device={device}
+            todos={todos as ITodo[]}
+            onCompleteTodo={onCompleteTodo}
+            onDeleteTodo={onDeleteTodo}
+            pagesNumber={pagesNumber}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+        />
+    )
+}
+
+export default MyTodosContainer
+

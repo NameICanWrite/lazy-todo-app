@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from 'styled-components';
-import { MainRouter } from '../navigation';
+import { MainRouter } from '../pagination';
 
 import * as theme from '../theme';
 import * as Styled from './app.styled';
@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
       cacheTime: Infinity
     }
   }
-});
+})
 
 const AppContainer = () => (
   <ThemeProvider theme={theme}>
@@ -28,6 +28,6 @@ const AppContainer = () => (
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </ThemeProvider>
-);
+)
 
-export default AppContainer;
+export default AppContainer
