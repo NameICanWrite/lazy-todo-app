@@ -36,5 +36,3 @@ export const ROUTER_KEYS = {
   EDIT_TODO: '/edit-todo',
   VIEW_TODO: '/view-todo'
 };
-
-export const SERVER_URL = 'http://localhost:5000'
