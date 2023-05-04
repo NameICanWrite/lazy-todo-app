@@ -6,7 +6,7 @@ import { APP_KEYS } from "../common/consts"
 import { ITodo } from "../common/types/todos.type"
 import { useEffect } from "react"
 import styled from "styled-components"
-import Input from "../my-todos/input/input"
+import Input from "../common/components/input/input"
 import { Button, Form, IsPrivate } from "./modify-todo-form.styled"
 
 const ModifyTodoForm = ({formik}: {formik: FormikProps<ITodo> | FormikProps<ITodoCreate>}) => {

@@ -1,28 +1,56 @@
 import { IUser } from '../types/user.type';
 import { ITodo } from '../types/todos.type';
 import { Todo } from './../entities/Todo';
-import { DeepPartial, In, Not } from 'typeorm';
+import { DeepPartial, ILike, In, Like, Not } from 'typeorm';
 import { User } from '../entities/User';
 
 import { entityTypes } from '../consts';
 
 export default class TodoService {
-  async findAll() {
-    const todos = await Todo.find({
-      order: {
-        id: 'ASC'
-      }
-    })
-    return todos;
+    async findAll() {
+        const todos = await Todo.find({
+            order: {
+                id: 'ASC'
+            }
+        })
+        return todos
+    }
+
+  async findAllPublic({search}: {search: string | undefined}) {
+    let todos 
+    if (search) {
+      todos = await Todo.find({where: {
+          isPrivate: false, 
+          name: ILike(`%${search || ''}%`)
+        },
+        relations: ['user']
+      })
+    } else {
+      todos = await Todo.find({where: {
+          isPrivate: false, 
+        },
+        relations: ['user']
+      })
+    }
+    return todos || [];
   }
 
-  async findAllPublic({excludeIds}: {excludeIds: string[]}) {
-    const todos = await Todo.find({where: {
-        isPrivate: false, 
-        id: Not(In(excludeIds))
-      },
-      relations: ['user']
-    })
+  async findAllCompleted({ search}: { search: string | undefined}) {
+    let todos 
+    if (search) {
+      todos = await Todo.find({where: {
+          isCompleted: true, 
+          name: ILike(`%${search || ''}%`)
+        },
+        relations: ['user']
+      })
+    } else {
+      todos = await Todo.find({where: {
+          isCompleted: true, 
+        },
+        relations: ['user']
+      })
+    }
     return todos || [];
   }
 
@@ -31,26 +59,21 @@ export default class TodoService {
     const toBeSaved = await Todo.save(todo as DeepPartial<Todo>)
   }
 
-  async edit(id: string, newTodo: ITodo) {
-    const todo = await Todo.update(id, newTodo)
-    return todo
-  }
+    async findById(id: string) {
+        const todo = await Todo.findOneBy({id})
+        return todo
+    }
 
-  async findById(id: string) {
-    const todo = await Todo.findOneBy({id})
-    return todo
-  }
+    async complete(id: string) {
+        const todo = await Todo.update(id, {isCompleted: true})
+        return todo
+    }
 
-  async complete(id: string) {
-    const todo = await Todo.update(id, {isCompleted: true})
-    return todo
-  }
+    async delete(id: string) {
+        await Todo.delete(id)
+    }
 
-  async delete(id: string) {
-    await Todo.delete(id)
-  }
-
-  async isTodoExists(id: string) {
-    return !!(await this.findById(id))
-  }
+    async isTodoExists(id: string) {
+        return !!(await this.findById(id))
+    }
 }

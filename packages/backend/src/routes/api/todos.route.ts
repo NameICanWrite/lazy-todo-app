@@ -10,7 +10,7 @@ const todosRouter: Router = Router();
 
 todosRouter.get('/', 
 optionalAuthAndGetUser,
-todoController.getAllVisibleTodos.bind(todoController)
+todoController.getAllVisibleTodosAndFilter.bind(todoController)
 );
 todosRouter.post('/', 
   authAndGetUser,

@@ -17,7 +17,7 @@ export type TodoProps = {
 const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
   const { name, description, isCompleted, isPrivate, id } = todo
   const history = useHistory()
-
+  
   const onCompleted = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isCompleted) {
       onComplete()

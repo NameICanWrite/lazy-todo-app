@@ -10,10 +10,16 @@ export class User extends BaseEntity {
   id: string;
 
   @Column()
-  name: string;
+  email: string;
 
   @Column()
   password: string;
+
+  @Column({default: '0'})
+  passwordResetCode: string
+
+  @Column({default: '0'})
+  passwordResetCodeExpiresAt: string
 
   @OneToMany(() => Todo, (todo: Todo) => todo.user)
   todos: Array<Todo>;

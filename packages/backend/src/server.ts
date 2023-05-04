@@ -18,7 +18,8 @@ connectDB();
 app.use(cors({
   origin: ["http://localhost:3000"],
   methods: ["GET", "POST", "OPTIONS", "PATCH", "PUT", 'DELETE'],
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['Authorization']
 }))
 app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json());

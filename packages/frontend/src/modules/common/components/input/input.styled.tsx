@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { COLORS, SPACES } from "../../theme"
+import { COLORS, SPACES } from "../../../theme"
 
 export const Container = styled('div')`
   width: 100%;

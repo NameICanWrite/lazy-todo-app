@@ -3,7 +3,8 @@ export const STORAGE_KEYS = {
   JWT_TOKEN_STUDENT: 'JWT_TOKEN_STUDENT',
   JWT_TOKEN_INSTRUCTOR: 'JWT_TOKEN_INSTRUCTOR',
   ADDRESS: 'ADDRESS',
-  TOKEN: 'TOKEN'
+  TOKEN: 'TOKEN',
+  EMAIL: 'EMAIL'
 };
 
 // React-query keys
@@ -12,8 +13,14 @@ export const QUERY_KEYS = {
   TOKEN: 'TOKEN',
   STATISTIC: 'statistic',
   TRENDING: 'trending',
-  TODOS: 'todos'
+  TODOS: 'todos',
+  GET_USER: 'get-user',
 };
+
+export const QUERY_ACTIONS = {
+  delete: 'DELETE',
+  update: 'UPDATE'
+}
 
 // Backend Routes
 export const BACKEND_KEYS = {
@@ -27,17 +34,18 @@ export const BACKEND_KEYS = {
 
 export const ROUTER_KEYS = {
   ROOT: '/',
-<<<<<<< HEAD
-  HOME: 'home',
-  AUTHORIZED: 'authorized'
-=======
   HOME: '/home',
   AUTHORIZED: '/authorized',
   LOGIN: '/login',
   SIGNUP:'/signup',
+  SIGNUP_SUCCESS: '/signup-success',
   MY_TODOS: '/my-todos',
   CREATE_TODO: '/create-todo',
   EDIT_TODO: '/edit-todo',
-  VIEW_TODO: '/view-todo'
->>>>>>> feature/vbaranivsky/connect-crud-with-frontend-dev
+  VIEW_TODO: '/view-todo',
+  FORGET_PASSWORD: '/forget-password',
+  RESET_PASSWORD: '/reset-password',
+  USER: '/user'
 };
+
+export const SERVER_URL = 'http://localhost:5000'
