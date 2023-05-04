@@ -1,3 +1,4 @@
+import { User } from "./user.types"
 
 
 export interface ITodo {
@@ -5,7 +6,8 @@ export interface ITodo {
   name: string
   description: string
   isPrivate: boolean
-  isCompleted?: boolean
+  isCompleted?: boolean,
+  user: User
 }
 
 export interface ITodoCreate {

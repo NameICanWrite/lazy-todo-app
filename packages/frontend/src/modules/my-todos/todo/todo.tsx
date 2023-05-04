@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { useState } from "react"
 import { useEffect } from "react"
 import { Actions, Container, DeleteButton, Description, DescriptionText, Name, ViewButton, CompleteButton } from "./todo.styled"
+import { useGetUser } from "../../common/hooks/use-get-user"
 
 export type TodoProps = {
   todo: ITodo,
@@ -15,8 +16,9 @@ export type TodoProps = {
 }
 
 const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
-  const { name, description, isCompleted, isPrivate, id } = todo
+  const { name, description, isCompleted, isPrivate, id, user } = todo
   const history = useHistory()
+  const {user: currentUser} = useGetUser()
   
   const onCompleted = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isCompleted) {
@@ -38,14 +40,15 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
         <ViewButton onClick={() => { history.push(`${APP_KEYS.ROUTER_KEYS.VIEW_TODO}/${id}`) }}>
           View
         </ViewButton>
+        {user?.id == currentUser?.id ? [
         <DeleteButton onClick={onDelete}>
           Delete
-        </DeleteButton>
+        </DeleteButton>,
         <CompleteButton
           on={isCompleted ?? false}
           onSwitch={onCompleted}
           name={'Completed'}
-        />
+        />] : <div>Not yours</div>}
       </Actions>
     </Container>
   )

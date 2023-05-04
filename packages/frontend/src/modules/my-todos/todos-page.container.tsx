@@ -1,10 +1,10 @@
 import axios from 'axios'
-import React, {useEffect, useState, useMemo, useLayoutEffect, useRef, useCallback} from 'react'
+import React, {useEffect, useState, useMemo, useLayoutEffect, useRef, useCallback, ChangeEvent} from 'react'
 import {useQuery} from 'react-query'
 import Todo from './todo/todo'
 import {ITodo} from '../common/types/todos.type'
 import todoService from '../../service/todos'
-import {useHistory} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 import {APP_KEYS} from '../common/consts'
 import styled from 'styled-components'
 import SwitchButton from './switch-button/switch-button'
@@ -14,29 +14,62 @@ import TodosPageComponent from './todos-page.component'
 import {BREAKPOINTS} from '../theme'
 import {useSetClientTodos} from '../common/hooks/use-set-client-todos'
 import {DeviceResolution} from '../common/types/devices.types'
+import { useQueryParams } from '../common/hooks/useQueryParams'
 import {User} from '../common/types/user.types'
 import {useQueryClient} from 'react-query'
 import userService from '../../service/user'
 
+
 const MyTodosContainer = () => {
     const history = useHistory()
-    const {isLoading, isError, data: todos, error, refetch} = useQuery<ITodo[]>([APP_KEYS.QUERY_KEYS.TODOS], () =>
-        todoService.getAllTodos(),
+    const query = useQueryParams()
+
+    const {isLoading, isError, data: fetchedTodos, error, refetch} = useQuery<{todos: ITodo[], totalTodos: number}>([
+            APP_KEYS.QUERY_KEYS.TODOS, 
+            query.get('search'), 
+            query.get('status')
+        ], () =>
+            todoService.getAllTodos({search: query.get('search'), status: query.get('status')
+    }),
     )
+    const todos = fetchedTodos?.todos
+    const totalTodos = fetchedTodos?.totalTodos
 
     const setClientTodos = useSetClientTodos()
 
     const onDeleteTodo = (id: string) => () => {
         todoService.deleteTodo(id).then(() => {
-            setClientTodos({action: 'DELETE', id})
+            // setClientTodos({action: 'DELETE', id})
+            refetch()
         })
     }
     const onCompleteTodo = (todo: ITodo) => () => {
         todoService.completeTodo(todo.id).then(() => {
             todo.isCompleted = true
-            setClientTodos({action: 'UPDATE', todo})
+            // setClientTodos({action: 'UPDATE', todo})
+            refetch()
         })
     }
+    const editUrlParam = (key: string, value: string) => {
+        let params: Record<string, string> = {}
+        query.delete(key)
+        query.forEach((value, key) => {
+            params[key] = value
+        })
+        if (value) params[key] = value
+       
+        const queryString = new URLSearchParams({...params})
+        history.push({search: `?${queryString}`}) 
+    }
+
+    const onFilterClick = (filter: string) => {
+        editUrlParam('status', filter) 
+    }
+    const onSearchChange = ({currentTarget: {value}}: ChangeEvent<HTMLInputElement>) => {
+        editUrlParam('search', value)
+    }
+
+    
 
     const [device, setDevice] = useState<DeviceResolution>('desktop')
     const deviceRef = useRef(device)
@@ -81,6 +114,8 @@ const MyTodosContainer = () => {
             pagesNumber={pagesNumber}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            onFilterClick={onFilterClick}
+            onSearchChange={onSearchChange}
         />
     )
 }

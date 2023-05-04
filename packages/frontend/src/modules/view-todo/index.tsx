@@ -12,10 +12,13 @@ import {useQueryClient} from 'react-query'
 import {QUERY_KEYS} from '../common/consts/app-keys.const'
 import {ITodo} from '../common/types/todos.type'
 import {useSetClientTodos} from '../common/hooks/use-set-client-todos'
+import { useGetUser } from '../common/hooks/use-get-user'
 
 const ViewTodoPage = () => {
     const {todo} = useOneTodo()
     const history = useHistory()
+
+    const {user: currentUser} = useGetUser()
 
     const setClientTodos = useSetClientTodos()
 
@@ -47,11 +50,11 @@ const ViewTodoPage = () => {
                         />
                     </ButtonWrapper>
                     {/* <Navigation> */}
-                    <EditButton
+                    {todo.user?.id == currentUser.id && <EditButton
                         onClick={() => history.push(`${APP_KEYS.ROUTER_KEYS.EDIT_TODO}/${todo.id}`)}
                     >
                         Edit
-                    </EditButton>
+                    </EditButton>}
                     <BackButton
                         onClick={() => history.push(`${APP_KEYS.ROUTER_KEYS.MY_TODOS}`)}
                     >

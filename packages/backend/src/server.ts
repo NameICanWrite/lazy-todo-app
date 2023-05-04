@@ -6,9 +6,11 @@ import cors from 'cors';
 import dotenv from 'dotenv'
 import AppRouter from './routes';
 import connectDB from './config/database';
+import helmet from 'helmet'
 dotenv.config()
 
 const app = express();
+app.use(helmet())
 const router = new AppRouter(app);
 // Connect to MongoDB
 connectDB();
@@ -22,6 +24,7 @@ app.use(cors({
   exposedHeaders: ['Authorization']
 }))
 app.set('port', process.env.PORT || 5000);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

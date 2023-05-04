@@ -11,49 +11,21 @@ import { User } from '../entities/User';
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
-    const currentUserTodos = (req.user as User)?.todos || []
-    const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) ?? []
-    let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
-    todos = todos.concat(currentUserTodos)
-    return todos
-  }
-
   async getAllVisibleTodosAndFilter(
       req: Request & {
         user: User, 
         todos: Todo[], 
-        query: {status: 'completed' | 'private' | 'public' | undefined, search: string | undefined}
+        query: {
+          status: string 
+          search: string | undefined, 
+          fromIndex:  string, 
+          toIndex:  string}
       }, 
       res: Response, 
       next: NextFunction
-    ) {
-      const {status, search} = req.query
-      let todos = []
-      const removeOthersPrivateTodos = (todo: ITodo) => {
-        if (todo && !todo.isPrivate || todo.user.id == req.user.id) return true
-        else return false
-      }
-      switch(status) {
-        case 'completed': 
-          todos = await this.todoService.findAllCompleted({search})
-          todos = todos.filter(removeOthersPrivateTodos)
-          return todos
-        case 'private': 
-          todos = req.user?.todos.filter(todo => todo.isPrivate && (!search || todo.name.match(search)))
-          return todos || []
-        case 'public': 
-          todos = await this.todoService.findAllPublic({search})
-          todos = todos.filter(todo => !todo.isPrivate)
-          return todos
-
-        default:
-          todos = await this.todoService.findAllPublic({search})
-          const currentUserPrivateTodos = req.user?.todos.filter(todo => todo.isPrivate && (!search || todo.name.match(search))) || []
-          todos = todos.concat(currentUserPrivateTodos)
-          return todos
-      }
-    
+  ) {
+    let {status, search, fromIndex, toIndex} = req.query
+    return await this.todoService.findAll({status, search, parseInt(fromIndex), parseInt(toIndex), userId: req.user?.id})
   }
 
   // async sortTodos(req: Request & {user: User, todos: Todo[], query: {status: string, search: string}}, res: Response) {
@@ -61,8 +33,8 @@ export class TodoController {
   // }
 
   async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response}) {
-    await this.todoService.create(req.body, req.user as User)
-    return 'Todo created'
+    const todo = await this.todoService.create(req.body, req.user as User)
+    return todo
   }
 
   async getOneTodo(req: Request<{id: string}> & {user: User}, res: Response) {

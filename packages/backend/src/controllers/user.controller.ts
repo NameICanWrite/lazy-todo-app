@@ -11,11 +11,10 @@ import { sendMail } from '../config/mailer';
 import crypto from 'crypto'
 
 
-console.log(bcrypt)
 export class UserController {
   constructor(private userService: UserService) {}
 
-  // @AddAuthToken
+
   async signup(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
     const existingUser = await this.userService.findByEmail(email);
@@ -29,7 +28,6 @@ export class UserController {
     return {message: 'Signed up successfully!', tokenPayload: {uid: newUser.id}}
   }
 
-  // @AddAuthToken
   async login(req: Request<any, any, {email: string, password: string}>, res: Response, next: NextFunction) {
     const { email, password } = req.body;
     const user = await this.userService.findByEmail(email);

@@ -76,9 +76,9 @@ export const DeleteButton = styled(Button)`
   }
 `
 export const CompleteButton = styled(SwitchButton)`
-  margin-right: ${SPACES.md};
+  margin-right: ${SPACES.sm};
   @media ${DEVICE.desktop} {
-    margin-right: ${SPACES.sm};
+    margin-right: ${SPACES.xs};
   }
 `
 export const Actions = styled('div')`
@@ -86,4 +86,8 @@ export const Actions = styled('div')`
   border-color: ${COLORS.black};
   display: flex;
   align-items: center;
+  width: 300px;
+  @media ${DEVICE.desktop} {
+    width: 270px;
+  }
 `

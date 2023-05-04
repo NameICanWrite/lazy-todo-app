@@ -26,7 +26,7 @@ const UserPageComponent: FC<UserProps> = (props) => {
                         Email: {user.email}
                     </Email>
                     <ForgetLabel>
-                        Forget Password?
+                        Change password
                     </ForgetLabel>
                     <ForgetButton onClick={forgetPassword}>
                         Reset

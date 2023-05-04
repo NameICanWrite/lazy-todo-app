@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import {COLORS, DEVICE, SPACES} from '../theme'
 import {Button} from '../common/components/button/button'
+import { BREAKPOINTS, COLORS, DEVICE, SPACES } from "../theme"
+import Input from "./input/input"
 
 export const Container = styled.div`
   padding: ${SPACES.sm};
@@ -42,7 +43,6 @@ export const Arrow = styled('div')`
 export const PrevArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-prev'}))`
   left: -40px;
   z-index: 10;
-
   &:before, &:after {
     content: '';
     position: absolute;
@@ -54,12 +54,10 @@ export const PrevArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-p
     border-bottom: 30px solid transparent;
     border-right: 30px solid ${COLORS.black};
   }
-
-  &:before {
+  &:before{
     left: 0;
   }
-
-  &:after {
+  &:after{
     left: 2px;
     border-right-color: ${COLORS.white}
   }
@@ -67,7 +65,6 @@ export const PrevArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-p
 
 export const NextArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-next'}))`
   right: -40px;
-
   &:before, &:after {
     content: '';
     position: absolute;
@@ -79,13 +76,38 @@ export const NextArrow = styled(Arrow).attrs(() => ({className: 'swiper-button-n
     border-bottom: 30px solid transparent;
     border-left: 30px solid ${COLORS.black};
   }
-
-  &:before {
+  &:before{
     right: 0;
   }
-
-  &:after {
+  &:after{
     right: 2px;
     border-left-color: ${COLORS.white}
   }
+`
+
+export const SearchInput = styled(Input)`
+ width: 300px;
+ margin-right: 0;
+ margin-left: auto;
+ margin-top: ${SPACES.sm};
+ display: block;
+`
+
+export const FiltersContainer = styled('div')`
+  display: flex;
+  width: ${BREAKPOINTS.mobile};
+  justify-content: space-around;
+  flex-wrap: wrap;
+`
+
+export const FilterButton = styled('button')`
+  width: 100px;
+  height: 30px;
+  background-color: ${({isSelected}: {isSelected: boolean}) => 
+    isSelected ? COLORS.veryLight : 'transparent'
+  };
+  /* margin: ${SPACES.xxs}; */
+  margin-bottom: ${SPACES.sm};
+  display: block
+  cursor: pointer;
 `

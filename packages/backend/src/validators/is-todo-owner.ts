@@ -4,7 +4,6 @@ import TryCatch from "../utils/try-catch.decorator";
 
 export const isTodoOwner = TryCatch(async function(req: Request, res: Response, next: NextFunction) {
 if ((req.user as User)?.todos.some(todo => todo.id == req.params.id)) {
-  console.log('happily deleted');
   return next()
 }
 res.status(400)

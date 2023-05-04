@@ -19,7 +19,8 @@ export type ForgetPasswordData = {
 }
 
 export type User = {
-    email: string
+    email: string,
+    id: number
 }
 
 export type ResetPasswordServerData= {
