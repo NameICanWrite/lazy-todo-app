@@ -11,64 +11,21 @@ import { User } from '../entities/User';
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  // async getAllVisibleTodos(req: Request & {user: User}, res: Response) {
-  //   const currentUserTodos = (req.user as User)?.todos || []
-  //   const currentUserTodosIds = currentUserTodos.map((todo: ITodo) => todo.id) ?? []
-  //   let todos = await this.todoService.findAllPublic({excludeIds: currentUserTodosIds as string[]});
-  //   todos = todos.concat(currentUserTodos)
-  //   return todos
-  // }
-
   async getAllVisibleTodosAndFilter(
       req: Request & {
         user: User, 
         todos: Todo[], 
         query: {
-          status: 'completed' | 'private' | 'public' | undefined, 
+          status: string 
           search: string | undefined, 
-          fromIndex: string, 
-          toIndex: string}
+          fromIndex:  string, 
+          toIndex:  string}
       }, 
       res: Response, 
       next: NextFunction
-    ) {
-      let {status, search, fromIndex, toIndex} = req.query
-      let todos = []
-      const removeOthersPrivateTodos = (todo: ITodo) => {
-        if (todo && (!todo.isPrivate || todo.user?.id == req.user?.id)) return true
-        else return false
-      }
-
-      switch(status) {
-        case 'completed': 
-          todos = await this.todoService.findAllCompleted({search})
-          console.log(todos);
-          todos = todos.filter(removeOthersPrivateTodos)
-          break
-
-        case 'private': 
-          todos = req.user?.todos.filter(todo => todo.isPrivate && (!search || todo.name.match(search)))
-          break 
-
-        case 'public': 
-          todos = await this.todoService.findAllPublic({search})
-          todos = todos.filter(todo => !todo.isPrivate)
-          break
-
-        default:
-          todos = await this.todoService.findAllPublic({search})
-          const currentUserPrivateTodos = req.user?.todos.filter(todo => todo.isPrivate && (!search || todo.name.match(search)))
-          if (currentUserPrivateTodos) todos = todos?.concat(currentUserPrivateTodos))\
-          break
-      }
-
-    if (!todos) return []
-    const totalTodos = todos.length
-    if (!fromIndex) fromIndex = 0
-    if (!toIndex) toIndex = todos.length
-    console.log(fromIndex, toIndex);
-    todos = todos.slice(parseInt(fromIndex), parseInt(toIndex) + 1)
-    return {totalTodos, todos}
+  ) {
+    let {status, search, fromIndex, toIndex} = req.query
+    return await this.todoService.findAll({status, search, parseInt(fromIndex), parseInt(toIndex), userId: req.user?.id})
   }
 
   async createTodo(req: Request<{id: string}, any, ITodo> & {user: User, res: Response}) {

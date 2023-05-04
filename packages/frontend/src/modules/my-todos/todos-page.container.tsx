@@ -26,7 +26,6 @@ const MyTodosContainer = () => {
     )
     const todos = fetchedTodos?.todos
     const totalTodos = fetchedTodos?.totalTodos
-    console.log(todos);
 
     const setClientTodos = useSetClientTodos()
 

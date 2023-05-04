@@ -13,7 +13,6 @@ class TodoService extends HttpService {
     })
   }
   editTodo(todo: ITodo) {
-    console.log(todo);
     return this.put({
       url: `todos/${todo.id}`,
       data: {...todo, id: undefined},
