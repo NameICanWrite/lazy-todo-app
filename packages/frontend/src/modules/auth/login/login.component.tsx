@@ -54,9 +54,6 @@ const LoginComponent: FC<LoginProps> = (props) => {
                 <ForgetLink onClick={() => history.push(APP_KEYS.ROUTER_KEYS.FORGET_PASSWORD)}>
                     Forgot password?
                 </ForgetLink>
-                {/*{isSuccess && (*/}
-                {/*    <Redirect to={APP_KEYS.ROUTER_KEYS.LOGIN}/>*/}
-                {/*)}*/}
             </Form>
         </Container>
     )
