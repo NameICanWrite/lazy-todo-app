@@ -10,7 +10,7 @@ export default class TodoService {
   async findAll({userId =-1, fromIndex = 0, toIndex = -1, search = '', status = ''} :{
     userId: number | undefined, fromIndex: number | undefined, toIndex: number | undefined, search: string | undefined, status: string | undefined
   }) {
-    let todos = await Todo
+    let todosQuery = Todo
       .createQueryBuilder('todos')
       .leftJoinAndSelect('todos.user', 'user')
       .where(`((todos.name like :search) OR (todos.description like :search) OR (:search = ''))`, { search: `%${search || ''}%` })
@@ -21,11 +21,21 @@ export default class TodoService {
           OR ((:status = '') AND ((todos.isPrivate = false) OR (todos.user.id = :userId)))
         )`, { status: status, userId: userId }
       )
+      .select([
+        'todos.id', 'todos.name', 'todos.description', 'todos.isPrivate', 'todos.isCompleted',
+        'user.id', 'user.email', 
+      ])
+
+    const totalTodos = await todosQuery.getCount()
+
+    const todos = await todosQuery
       .skip(fromIndex || 0)
       .take((toIndex - fromIndex + 1) || 10000)
       .getMany()
+
     if (!todos) todos = []
-    return { totalTodos: todos.length, todos }
+    console.log({ totalTodos, todos });
+    return { totalTodos, todos }
   }
 
   async findAllPublic({ search }: { search: string | undefined }) {

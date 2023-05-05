@@ -25,7 +25,9 @@ export class TodoController {
       next: NextFunction
   ) {
     let {status, search, fromIndex, toIndex} = req.query
-    return await this.todoService.findAll({status, search, parseInt(fromIndex), parseInt(toIndex), userId: req.user?.id})
+    return await this.todoService.findAll({
+      status, search, fromIndex: parseInt(fromIndex), toIndex: parseInt(toIndex), userId: req.user?.id
+    })
   }
 
   // async sortTodos(req: Request & {user: User, todos: Todo[], query: {status: string, search: string}}, res: Response) {

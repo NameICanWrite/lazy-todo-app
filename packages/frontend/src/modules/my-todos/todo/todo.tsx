@@ -18,14 +18,14 @@ export type TodoProps = {
 const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
   const { name, description, isCompleted, isPrivate, id, user } = todo
   const history = useHistory()
-  const {user: currentUser} = useGetUser()
-  
+  const { user: currentUser } = useGetUser()
+
   const onCompleted = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isCompleted) {
       onComplete()
     }
   }
-  
+
   return (
     <Container index={index}>
       <Name>
@@ -40,17 +40,24 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
         <ViewButton onClick={() => { history.push(`${APP_KEYS.ROUTER_KEYS.VIEW_TODO}/${id}`) }}>
           View
         </ViewButton>
-        {user?.id == currentUser?.id ? [
-        <DeleteButton onClick={onDelete}>
-          Delete
-        </DeleteButton>,
-        <CompleteButton
-          on={isCompleted ?? false}
-          onSwitch={onCompleted}
-          name={'Completed'}
-        />] : <div>Not yours</div>}
+        {user?.id == currentUser?.id ? (
+          <>
+            <DeleteButton onClick={onDelete}>
+              Delete
+            </DeleteButton>,
+            <CompleteButton
+              on={isCompleted ?? false}
+              onSwitch={onCompleted}
+              name={'Completed'}
+            />
+          </>
+        ) : (
+          <div>
+            Not yours
+          </div>
+        )}
       </Actions>
-    </Container>
+    </Container >
   )
 }
 
