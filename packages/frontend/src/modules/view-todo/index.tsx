@@ -59,7 +59,6 @@ const ViewTodoPage = () => {
                     >
                         Back
                     </BackButton>
-                    {/* </Navigation>         */}
                 </Wrapper>
             )}
         </>

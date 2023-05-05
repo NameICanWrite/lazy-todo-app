@@ -45,7 +45,6 @@ const MyTodosContainer = () => {
     const onCompleteTodo = (todo: ITodo) => () => {
         todoService.completeTodo(todo.id).then(() => {
             todo.isCompleted = true
-            // setClientTodos({action: 'UPDATE', todo})
             refetch()
         })
     }
