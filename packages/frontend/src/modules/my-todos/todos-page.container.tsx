@@ -21,29 +21,15 @@ import userService from '../../service/user'
 import { TODOS_ON_PAGINATION } from '../common/consts/app-keys.const'
 import { useEditUrlParam } from '../common/hooks/edit-url-param'
 
-  // const {isLoading, isError, data: fetchedTodos, error, refetch} = useQuery<{todos: ITodo[], totalTodos: number}>([
-    //         APP_KEYS.QUERY_KEYS.TODOS, 
-    //         query.get('search'), 
-    //         query.get('status'),
-    //         currentPage,
-    //     ], () => todoService.getAllTodos({
-    //                 search: query.get('search'), 
-    //                 status: query.get('status'),
-    //                 fromIndex: (currentPage - 1) * TODOS_ON_PAGINATION,
-    //                 toIndex: currentPage * TODOS_ON_PAGINATION - 1
-    //             }),
-    //     {
-    //         keepPreviousData: true
-    //     }
-    // )
+
 
 const MyTodosContainer = () => {
     const history = useHistory()
     const query = useQueryParams()
     const [currentPage, setCurrentPage] = useState(1)
-    const [clickedPage, setClickedPage] = useState()
   
-    const { isLoading: isTodosLoading, isError, data: queryData, fetchNextPage, error, refetch} = useInfiniteQuery<{ todos: ITodo[], totalTodos: number }[]>(
+    const { isLoading: isTodosLoading, isError, data: queryData, fetchNextPage, error, refetch} = useInfiniteQuery<
+    { todos: ITodo[], totalTodos: number, hasNextPage: boolean, page: number }>(
         {
             queryKey: [
                 APP_KEYS.QUERY_KEYS.TODOS,
@@ -51,7 +37,6 @@ const MyTodosContainer = () => {
                 query.get('status')
             ],
             queryFn: ({pageParam = 1}) => {
-                console.log('pageParam');
                 return todoService.getAllTodos({
                     search: query.get('search'),
                     status: query.get('status'),
@@ -60,35 +45,27 @@ const MyTodosContainer = () => {
                 })
             },
             getNextPageParam: (lastPage) => {
-                if (clickedPage) return query.get(page)
                 if (lastPage.hasNextPage) return lastPage.page + 1
             },
             refetchOnMount: true
         }
         )
-    const todos = queryData?.pages.reduce((accumulator, currentValue) => {
+    const todos = queryData?.pages.reduce<ITodo[]>((accumulator, currentValue) => {
         currentValue.todos.forEach(value => accumulator.push(value))
         return accumulator
     }, [])
     const pagedTodos = queryData?.pages
-    console.log('pagedTodos',pagedTodos);
     const totalTodos = queryData?.pages[0].totalTodos
-
-    console.log('todos', todos)
     const setClientTodos = useSetClientTodos()
 
     const onDeleteTodo = (id: string) => () => {
         todoService.deleteTodo(id).then(() => {
-            // setClientTodos({action: 'DELETE', id})
-            // refetch()
             refetch()
         })
     }
     const onCompleteTodo = (todo: ITodo) => () => {
         todoService.completeTodo(todo.id).then(() => {
             todo.isCompleted = true
-            // setClientTodos({action: 'UPDATE', todo})
-            // refetch()
             refetch()
         })
     }
@@ -132,7 +109,6 @@ const MyTodosContainer = () => {
         if (!todos) return 
         setCurrentPage(number)
         if (number > Math.floor(todos.length/10)) {
-            // editUrlParam('page', number)
             fetchNextPage({pageParam: number })
         }
     }
@@ -142,7 +118,7 @@ const MyTodosContainer = () => {
     return (
         <TodosPageComponent
             device={device}
-            todos={todos as ITodo[]}
+            todos={todos}
             pagedTodos={pagedTodos}
             onCompleteTodo={onCompleteTodo}
             onDeleteTodo={onDeleteTodo}
@@ -152,7 +128,6 @@ const MyTodosContainer = () => {
             onFilterClick={onFilterClick}
             onSearchChange={onSearchChange}
             fetchNextPage={fetchNextPage}
-            setClickedPage={setClickedPage}
             isTodosLoading={isTodosLoading}
         />
     )

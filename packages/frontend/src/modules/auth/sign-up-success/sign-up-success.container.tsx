@@ -14,7 +14,6 @@ const SignUpSuccessContainer = () => {
         return userService.getUser()
     })
 
-    console.log('isSuccess', isSuccess)
 
     return (
         <SignUpSuccessComponent isSuccess={isSuccess}/>

@@ -17,7 +17,7 @@ export type TodoProps = {
 }
 
 const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
-  const { name, description, isCompleted, isPrivate, id, user, withLoadingBottom, containerRef } = todo
+  const { name, description, isCompleted, isPrivate, id, user} = todo
   const history = useHistory()
   const { user: currentUser } = useGetUser()
 
@@ -28,7 +28,7 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
   }
 
   return (
-    <Container index={index} ref={containerRef}>
+    <Container index={index}>
       <Name>
         {name}
       </Name>
@@ -58,7 +58,6 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
           </div>
         )}
       </Actions>
-      {withLoadingBottom && <CircularProgress />}
     </Container >
   )
 }

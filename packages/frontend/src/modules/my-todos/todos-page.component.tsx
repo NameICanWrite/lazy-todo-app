@@ -1,6 +1,5 @@
 import { useHistory } from "react-router-dom";
 import { APP_KEYS } from "../common/consts";
-// import Pagination from "../pagination/pagination";
 import Todo from "./todo/todo";
 import styled from "styled-components";
 import { ITodo } from "../common/types/todos.type";
@@ -18,17 +17,24 @@ import { useQueryParams } from "../common/hooks/useQueryParams";
 import { TODOS_ON_PAGINATION } from "../common/consts/app-keys.const";
 import { useInView } from "react-intersection-observer";
 import { CircularProgress } from "@mui/material";
+import { PagedTodo } from "../common/types/todo-page.type";
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
+
+
 
 export type TodosPageProps = {
     device: DeviceResolution,
-    todos: ITodo[],
+    todos: ITodo[] | undefined,
     onCompleteTodo: (todo: ITodo) => () => void,
     onDeleteTodo: (id: string) => () => void,
     pagesNumber: number,
     currentPage: number,
     setCurrentPage: (_: any, number: number) => void,
     onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void,
-    onFilterClick: (filter: string) => void
+    onFilterClick: (filter: string) => void,
+    pagedTodos: PagedTodo[] | undefined,
+    fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<InfiniteQueryObserverResult<PagedTodo, unknown>>,
+    isTodosLoading: boolean,
 }
 
 const STATUSES = {
@@ -39,17 +45,19 @@ const STATUSES = {
 }
 
 const TodosPageComponent: FC<TodosPageProps> = (props) => {
-    const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage, onSearchChange, onFilterClick, fetchNextPage, setClickedPage, pagedTodos, isTodosLoading } = props
+    const {
+        device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage,
+        onSearchChange, onFilterClick, fetchNextPage, pagedTodos, isTodosLoading
+    } = props
     const history = useHistory()
-    const {ref: todoLoadingInViewRef, inView: isTodoLoadingInView} = useInView({
+    const { ref: todoLoadingInViewRef, inView: isTodoLoadingInView } = useInView({
         threshold: 0.1
     })
 
     const [currentFilter, setCurrentFilter] = useState(useQueryParams().get('status') || STATUSES.ALL)
 
     useEffect(() => {
-        if (!isTodoLoadingInView) return 
-        // console.log('111111111111')
+        if (!isTodoLoadingInView) return
         fetchNextPage()
     }, [isTodoLoadingInView])
 
@@ -58,12 +66,10 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
             return (
                 <>
                     <TodosTable>
-                        {pagedTodos && 
+                        {pagedTodos &&
                             pagedTodos.find(item => {
-                                console.log(currentPage)
-                                console.log(item.page)
                                 return item.page == currentPage
-                            })?.todos.map((todo, index) => 
+                            })?.todos.map((todo, index) =>
                                 <Todo
                                     index={index}
                                     key={todo.id}
@@ -91,13 +97,11 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
                             spaceBetween={50}
                             slidesPerView={1}
                             onSlideChange={(swiper) => {
-                                console.log('slide change');
                                 if (swiper.activeIndex == swiper.slides.length - 2) {
-                                    console.log('loading data...');
                                     fetchNextPage()
                                 }
                             }}
-                            onSwiper={(swiper) => console.log(swiper)}
+                            onSwiper={() => {}}
                             pagination={{ clickable: true }}
                             modules={[Navigation]}
                             navigation={{
@@ -137,10 +141,10 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
                             todo={todo}
                             onDelete={onDeleteTodo(todo.id)}
                             onComplete={onCompleteTodo(todo)}
-                        />  
+                        />
                         {isTodosLoading && <CircularProgress />}
                     </div>
-                    
+
                 ))}
             </div>
         )
@@ -158,12 +162,12 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
     }, [])
 
     return (
-        <Container onScroll={e => console.log('scroll')}>
+        <Container>
             <CreateButton onClick={() => history.push(APP_KEYS.ROUTER_KEYS.CREATE_TODO)}>
                 Create todo
             </CreateButton>
             <LinksContainer />
-            <SearchInput onChange={onSearchChange} placeholder="Search todos" />
+            <SearchInput onChange={onSearchChange} label="Search todos" />
             <FiltersContainer>
                 <FilterButton
                     isSelected={currentFilter === STATUSES.ALL}
