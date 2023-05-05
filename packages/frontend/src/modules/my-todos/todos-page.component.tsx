@@ -17,6 +17,7 @@ import LinksContainer from './links/links.container'
 import { useQueryParams } from "../common/hooks/useQueryParams";
 import { TODOS_ON_PAGINATION } from "../common/consts/app-keys.const";
 import { useInView } from "react-intersection-observer";
+import { CircularProgress } from "@mui/material";
 
 export type TodosPageProps = {
     device: DeviceResolution,
@@ -38,38 +39,39 @@ const STATUSES = {
 }
 
 const TodosPageComponent: FC<TodosPageProps> = (props) => {
-    const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage, onSearchChange, onFilterClick } = props
+    const { device, todos, onCompleteTodo, onDeleteTodo, pagesNumber, currentPage, setCurrentPage, onSearchChange, onFilterClick, fetchNextPage, setClickedPage, pagedTodos, isTodosLoading } = props
     const history = useHistory()
-    const {ref, inView} = useInView()
+    const {ref: todoLoadingInViewRef, inView: isTodoLoadingInView} = useInView({
+        threshold: 0.1
+    })
 
     const [currentFilter, setCurrentFilter] = useState(useQueryParams().get('status') || STATUSES.ALL)
 
-    // useEffect(() => { console.log(todos); }, [todos])
-
-//    const testTodos = todos && Array.from({ length: TODOS_ON_PAGINATION }, (_, i) => (currentPage - 1) * TODOS_ON_PAGINATION + i)
-//                                 .filter(i => i < todos.length)
-//                                 .map(i => todos[i])
-//     console.log('testTodos', testTodos)
+    useEffect(() => {
+        if (!isTodoLoadingInView) return 
+        // console.log('111111111111')
+        fetchNextPage()
+    }, [isTodoLoadingInView])
 
     const renderTodos = () => {
         if (device === 'desktop') {
             return (
                 <>
                     <TodosTable>
-                        {todos &&
-                            Array.from({ length: TODOS_ON_PAGINATION }, (_, i) => (currentPage - 1) * TODOS_ON_PAGINATION + i)
-                                .filter(i => i < todos.length)
-                                .map(i => todos[i])
-                                .map((todo, index) => (
-                                    <Todo
-                                        index={index}
-                                        key={todo.id}
-                                        todo={todo}
-                                        onDelete={onDeleteTodo(todo.id)}
-                                        onComplete={onCompleteTodo(todo)}
-                                    />
-                                    // <div id={todo.id} key={todo.id}/>
-                                ))
+                        {pagedTodos && 
+                            pagedTodos.find(item => {
+                                console.log(currentPage)
+                                console.log(item.page)
+                                return item.page == currentPage
+                            })?.todos.map((todo, index) => 
+                                <Todo
+                                    index={index}
+                                    key={todo.id}
+                                    todo={todo}
+                                    onDelete={onDeleteTodo(todo.id)}
+                                    onComplete={onCompleteTodo(todo)}
+                                />
+                            )
                         }
                     </TodosTable>
                     <Pagination
@@ -92,7 +94,7 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
                                 console.log('slide change');
                                 if (swiper.activeIndex == swiper.slides.length - 2) {
                                     console.log('loading data...');
-                                    setCurrentPage(undefined, currentPage + 1)
+                                    fetchNextPage()
                                 }
                             }}
                             onSwiper={(swiper) => console.log(swiper)}
@@ -109,6 +111,7 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
                             {todos.map((todo, index) => (
                                 <SwiperSlide key={todo.id}>
                                     <Todo
+                                        key={todo.id}
                                         index={index}
                                         todo={todo}
                                         onDelete={onDeleteTodo(todo.id)}
@@ -125,15 +128,19 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
         }
 
         return (
-            <div style={{ overflowY: 'scroll' }}>
-                {todos && todos.map((todo, index) => (
-                    <Todo
-                        index={index}
-                        key={todo.id}
-                        todo={todo}
-                        onDelete={onDeleteTodo(todo.id)}
-                        onComplete={onCompleteTodo(todo)}
-                    />
+            <div>
+                {todos && todos.map((todo, index, array) => (
+                    <div key={todo.id} ref={index === array.length - 1 ? todoLoadingInViewRef : undefined}>
+                        <Todo
+                            index={index}
+                            key={todo.id}
+                            todo={todo}
+                            onDelete={onDeleteTodo(todo.id)}
+                            onComplete={onCompleteTodo(todo)}
+                        />  
+                        {isTodosLoading && <CircularProgress />}
+                    </div>
+                    
                 ))}
             </div>
         )
@@ -147,12 +154,6 @@ const TodosPageComponent: FC<TodosPageProps> = (props) => {
     }
 
     useEffect(() => {
-        // window.onscroll(() => {
-        //     if (device === 'mobile' && window.document.body.scrollTop === (window.document.body.scrollHeight - window.document.body.offsetHeight)) {
-        //         // setCurrentPage(undefined, currentPage + 1)
-        //         console.log(1);
-        //     }
-        // })
 
     }, [])
 

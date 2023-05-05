@@ -7,6 +7,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import { Actions, Container, DeleteButton, Description, DescriptionText, Name, ViewButton, CompleteButton } from "./todo.styled"
 import { useGetUser } from "../../common/hooks/use-get-user"
+import { CircularProgress } from "@mui/material"
 
 export type TodoProps = {
   todo: ITodo,
@@ -16,7 +17,7 @@ export type TodoProps = {
 }
 
 const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
-  const { name, description, isCompleted, isPrivate, id, user } = todo
+  const { name, description, isCompleted, isPrivate, id, user, withLoadingBottom, containerRef } = todo
   const history = useHistory()
   const { user: currentUser } = useGetUser()
 
@@ -27,7 +28,7 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
   }
 
   return (
-    <Container index={index}>
+    <Container index={index} ref={containerRef}>
       <Name>
         {name}
       </Name>
@@ -44,7 +45,7 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
           <>
             <DeleteButton onClick={onDelete}>
               Delete
-            </DeleteButton>,
+            </DeleteButton>
             <CompleteButton
               on={isCompleted ?? false}
               onSwitch={onCompleted}
@@ -57,6 +58,7 @@ const Todo: FC<TodoProps> = ({ todo, onDelete, onComplete, index }) => {
           </div>
         )}
       </Actions>
+      {withLoadingBottom && <CircularProgress />}
     </Container >
   )
 }

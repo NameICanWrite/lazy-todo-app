@@ -31,11 +31,16 @@ export default class TodoService {
     const todos = await todosQuery
       .skip(fromIndex || 0)
       .take((toIndex - fromIndex + 1) || 10000)
+      .orderBy('todos.id', 'DESC')
       .getMany()
 
     if (!todos) todos = []
-    console.log({ totalTodos, todos });
-    return { totalTodos, todos }
+    const todosOnPage = toIndex - fromIndex
+    const maxWithCurrentPages = totalTodos + (totalTodos % todosOnPage)
+    const page = Math.floor((toIndex + 1) / todosOnPage)
+    const hasNextPage = totalTodos > toIndex
+    console.log({ totalTodos, todos, page });
+    return { totalTodos, todos, page, hasNextPage }
   }
 
   async findAllPublic({ search }: { search: string | undefined }) {
@@ -92,7 +97,7 @@ export default class TodoService {
   }
 
   async findById(id: string) {
-    const todo = await Todo.findOneBy({ id })
+    const todo = await Todo.findOne({ where: {id}, relations: ['user'] })
     return todo
   }
 

@@ -15,20 +15,20 @@ import {useSetClientTodos} from '../common/hooks/use-set-client-todos'
 import { useGetUser } from '../common/hooks/use-get-user'
 
 const ViewTodoPage = () => {
-    const {todo} = useOneTodo()
+    const {todo, refetch} = useOneTodo()
     const history = useHistory()
 
     const {user: currentUser} = useGetUser()
 
     const setClientTodos = useSetClientTodos()
 
+    const queryClient = useQueryClient()
     const onCompleteTodo = () => (event: ChangeEvent<HTMLInputElement>) => {
         if (!todo || todo.isCompleted) return
         todoService.completeTodo(todo.id).then(() => {
-            setClientTodos({action: 'UPDATE', todo})
+            refetch()
         })
     }
-
     return (
         <>
             {todo && (
