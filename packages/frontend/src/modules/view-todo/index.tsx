@@ -49,7 +49,6 @@ const ViewTodoPage = () => {
                             name="isCompleted"
                         />
                     </ButtonWrapper>
-                    {/* <Navigation> */}
                     {todo.user?.id == currentUser.id && <EditButton
                         onClick={() => history.push(`${APP_KEYS.ROUTER_KEYS.EDIT_TODO}/${todo.id}`)}
                     >

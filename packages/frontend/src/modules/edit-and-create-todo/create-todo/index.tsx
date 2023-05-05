@@ -9,7 +9,6 @@ const CreateTodoPage = () => {
             <Header variant={'h1'}>
                 Create Todo Page
             </Header>
-            {/*<Header></Header>*/}
             <CreateTodoFormContainer/>
         </div>
     )

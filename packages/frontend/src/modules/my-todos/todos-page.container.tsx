@@ -39,7 +39,6 @@ const MyTodosContainer = () => {
 
     const onDeleteTodo = (id: string) => () => {
         todoService.deleteTodo(id).then(() => {
-            // setClientTodos({action: 'DELETE', id})
             refetch()
         })
     }
