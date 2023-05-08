@@ -17,7 +17,7 @@ type UserProps = {
 
 const UserPageComponent: FC<UserProps> = (props) => {
     const {user, forgetPassword, isSuccess, logout} = props
-
+    
     return (
         <Container>
             {user ? (

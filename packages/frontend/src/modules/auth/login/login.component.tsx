@@ -19,7 +19,7 @@ export type LoginProps = {
 
 const LoginComponent: FC<LoginProps> = (props) => {
     const { formik, isSuccess } = props
-
+    
     const history = useHistory()
     return (
         <Container>
@@ -32,6 +32,7 @@ const LoginComponent: FC<LoginProps> = (props) => {
                     type={'email'}
                     placeholder={'Enter email'}
                     onChange={formik.handleChange}
+                    
                 />
                 <AuthInput
                     value={formik.values.password}
@@ -41,6 +42,7 @@ const LoginComponent: FC<LoginProps> = (props) => {
                     type={'password'}
                     placeholder={'Enter password'}
                     onChange={formik.handleChange}
+                    
                 />
                 <AuthButtonContainer>
                     <Button>

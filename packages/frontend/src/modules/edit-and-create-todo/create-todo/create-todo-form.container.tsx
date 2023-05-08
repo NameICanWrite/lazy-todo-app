@@ -4,7 +4,8 @@ import {ITodo, ITodoCreate} from '../../common/types/todos.type'
 import {useHistory} from 'react-router-dom'
 import {APP_KEYS} from '../../common/consts'
 import ModifyTodoForm from '../modify-todo-form'
-import {INITIAL_VALUES} from './create-todo-form.consts'
+import {INITIAL_VALUES, VALIDATIONS} from './create-todo-form.consts'
+import { validateAll } from '../../common/utils/validate'
 
 const CreateTodoFormContainer = () => {
     const history = useHistory()
@@ -16,6 +17,10 @@ const CreateTodoFormContainer = () => {
             history.push(APP_KEYS.ROUTER_KEYS.MY_TODOS)
             formik.resetForm()
         },
+        validate: (values: ITodoCreate) => {
+            return validateAll(values, VALIDATIONS)
+        },
+        validateOnChange: true
     })
 
     return (

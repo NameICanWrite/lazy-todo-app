@@ -8,8 +8,7 @@ import { ITodo } from "../types/todos.type"
 export function useOneTodo() {
   const params: any = useParams()
   const {isLoading, isError, data: todo, error, refetch} = useQuery<ITodo>([`${APP_KEYS.QUERY_KEYS.TODOS}:${params.id}`], () =>
-    todoService.getOneTodo(params.id),
-    {
+    todoService.getOneTodo(params.id), {
       refetchOnMount: true
     }
   )

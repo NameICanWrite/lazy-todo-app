@@ -16,7 +16,7 @@ const UserPageContainer = () => {
             userService.forgetPassword(user.email)
         }
     })
-
+    
     const forgetPassword = () => {
         if (!user) return
         mutate(user, {

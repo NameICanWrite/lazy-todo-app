@@ -20,6 +20,7 @@ const ModifyTodoForm = ({formik}: {formik: FormikProps<ITodo> | FormikProps<ITod
         placeholder="Enter name"
         value={formik.values.name}
         onChange={formik.handleChange}
+        error={formik.errors.name}
       />
       <Input
         name="description"
@@ -28,6 +29,7 @@ const ModifyTodoForm = ({formik}: {formik: FormikProps<ITodo> | FormikProps<ITod
         placeholder="Enter description"
         value={formik.values.description}
         onChange={formik.handleChange}
+        error={formik.errors.description}
       />
       <IsPrivate
         name='isPrivate'
