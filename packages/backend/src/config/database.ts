@@ -19,17 +19,17 @@ function getSSLConfig(env: string) {
 const connectDB = async () => {
   try {
     const options: DataSourceOptions = {
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
       logging: ['query', 'error'],
       type: 'postgres',
       entities: [Todo, User],
       // migrations: ['dist/migrations/**/*.{ts,js}'],
       // subscribers: ['src/subscriber/**/*.ts'],
-      database: process.env.POSTGRES_DB,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      ssl: false, // getSSLConfig(process.env.SERVER_MODE!),
+      database: process.env.DB_NAME,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      ssl: true, // getSSLConfig(process.env.SERVER_MODE!),
       synchronize: true
     };
     await createConnection(options);
