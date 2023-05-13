@@ -18,7 +18,7 @@ connectDB();
 
 // Express configuration
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000", process.env.CLIENT_ROOT_URL],
   methods: ["GET", "POST", "OPTIONS", "PATCH", "PUT", 'DELETE'],
   credentials: true,
   exposedHeaders: ['Authorization']
