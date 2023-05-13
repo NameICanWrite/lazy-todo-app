@@ -7,6 +7,7 @@ import { MainRouter } from '../pagination';
 import * as theme from '../theme'
 import * as Styled from './app.styled'
 import '../../style.css'
+import HealthCheck from '../common/components/HealthCheck/HealthCheck';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -24,7 +25,9 @@ const AppContainer = () => (
     <ThemeProvider theme={theme}>
         <Styled.GlobalStyles/>
         <QueryClientProvider client={queryClient}>
-            <MainRouter/>
+            <HealthCheck>
+                <MainRouter/>
+            </HealthCheck>
         </QueryClientProvider>
     </ThemeProvider>
 )
