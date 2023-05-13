@@ -18,7 +18,7 @@ app.use((0, helmet_1.default)());
 const router = new routes_1.default(app);
 (0, database_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:3000"],
+    origin: ["https://lazy-todo-app.netlify.app", process.env.CLIENT_ROOT_URL],
     methods: ["GET", "POST", "OPTIONS", "PATCH", "PUT", 'DELETE'],
     credentials: true,
     exposedHeaders: ['Authorization']

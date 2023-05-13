@@ -15,10 +15,11 @@ const router = new AppRouter(app);
 // Connect to MongoDB
 connectDB();
 
+// console.log(process.env.CLIENT_ROOT_URL);
 
 // Express configuration
 app.use(cors({
-  origin: ["http://localhost:3000", process.env.CLIENT_ROOT_URL],
+  origin: ["https://lazy-todo-app.netlify.app",process.env.CLIENT_ROOT_URL],
   methods: ["GET", "POST", "OPTIONS", "PATCH", "PUT", 'DELETE'],
   credentials: true,
   exposedHeaders: ['Authorization']
