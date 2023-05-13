@@ -17,7 +17,7 @@ const CreateTodoFormContainer = () => {
             history.push(APP_KEYS.ROUTER_KEYS.MY_TODOS)
             formik.resetForm()
         },
-        validate: (values: ITodoCreate) => {
+        validate: (values: any) => {
             return validateAll(values, VALIDATIONS)
         },
         validateOnChange: true
