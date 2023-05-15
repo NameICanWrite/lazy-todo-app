@@ -29,9 +29,9 @@ const HealthCheck = ({children, ...props}) => {
 			?
 				<div style={{width: '100%'}}>
 					<DivWithSpinner isLoading={true} />
-					<p className={styles.waitMessage}>{waitTime >= 3 ? `Please wait for demo server to wake up. It can take 20-60 s. Waiting time: ${waitTime} s` : ""}</p>
+					<p style={{textAlign: 'center', width: '100vw'}} className={styles.waitMessage}>{waitTime >= 3 ? `Please wait for demo server to wake up. It can take 20-60 s. Waiting time: ${waitTime} s` : ""}</p>
 					<br />
-					<p className={styles.waitMessage}>{waitTime >= 3 ? `The server falls asleep after each 15 min of inactivity in order to remain free of charge` : ""}</p>
+					<p style={{textAlign: 'center', width: '100vw'}} className={styles.waitMessage}>{waitTime >= 3 ? `The server falls asleep after each 15 min of inactivity in order to remain free of charge` : ""}</p>
 				</div>
 				
 			:
